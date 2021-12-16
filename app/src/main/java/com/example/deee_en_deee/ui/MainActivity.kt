@@ -6,13 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,122 +16,187 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.ui.components.SpellCardList
+import com.example.deee_en_deee.ui.components.capitalize
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val mainVM = MainVM()
 
-    private val abilityScoreList by mainVM.listOfAbilityScores
-    private val alignmentList by mainVM.listOfAlignments
-    private val classList by mainVM.listOfClasses
-    private val conditionList by mainVM.listOfConditions
-    private val damageTypeList by mainVM.listOfDamageTypes
-    private val equipmentCategoryList by mainVM.listOfEquipmentCategories
-    private val equipmentList by mainVM.listOfEquipments
-    private val featList by mainVM.listOfFeats
-    private val featureList by mainVM.listOfFeatures
-    private val languageList by mainVM.listOfLanguages
-    private val magicItemList by mainVM.listOfMagicItems
-    private val magicSchoolList by mainVM.listOfMagicSchools
-    private val monsterList by mainVM.listOfMonsters
-    private val proficiencyList by mainVM.listOfProficiencies
-    private val raceList by mainVM.listOfRaces
-    private val ruleList by mainVM.listOfRules
-    private val ruleSectionList by mainVM.listOfRuleSections
-    private val skillList by mainVM.listOfSkills
-    private val spellList by mainVM.listOfSpells
-    private val subclassList by mainVM.listOfSubclasses
-    private val subraceList by mainVM.listOfSubraces
-    private val traitList by mainVM.listOfTraits
-    private val weaponPropertyList by mainVM.listOfWeaponProperties
+
+    val isLoading by mainVM.isLoading
+
+//    private val abilityScoreList by mainVM.listOfAbilityScores
+//    private val alignmentList by mainVM.listOfAlignments
+//    private val classList by mainVM.listOfClasses
+//    private val conditionList by mainVM.listOfConditions
+//    private val damageTypeList by mainVM.listOfDamageTypes
+//    private val equipmentCategoryList by mainVM.listOfEquipmentCategories
+//    private val equipmentList by mainVM.listOfEquipments
+//    private val featList by mainVM.listOfFeats
+//    private val featureList by mainVM.listOfFeatures
+//    private val languageList by mainVM.listOfLanguages
+//    private val magicItemList by mainVM.listOfMagicItems
+//    private val magicSchoolList by mainVM.listOfMagicSchools
+//    private val monsterList by mainVM.listOfMonsters
+//    private val proficiencyList by mainVM.listOfProficiencies
+//    private val raceList by mainVM.listOfRaces
+//    private val ruleList by mainVM.listOfRules
+//    private val ruleSectionList by mainVM.listOfRuleSections
+//    private val skillList by mainVM.listOfSkills
+//    private val spellList by mainVM.listOfSpells
+//    private val subclassList by mainVM.listOfSubclasses
+//    private val subraceList by mainVM.listOfSubraces
+//    private val traitList by mainVM.listOfTraits
+//    private val weaponPropertyList by mainVM.listOfWeaponProperties
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val loadedCategories = mutableStateOf(0)
+        val downloadingCategoryTitle = mutableStateOf("")
+
         this.lifecycleScope.launch {
             mainVM.getCategories().onSuccess {
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.abilityScore)
+                mainVM.setLoading(true)
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.abilityScore)
                 mainVM.getAbilityScores(it.abilityScore)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.alignments)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
                 mainVM.getAlignments(it.alignments)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.classes)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
                 mainVM.getClasses(it.classes)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.conditions)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.conditions)
                 mainVM.getConditions(it.conditions)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.damageTypes)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.damageTypes)
                 mainVM.getDamageTypes(it.damageTypes)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.equipmentCategory)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipmentCategory)
                 mainVM.getEquipmentCategories(it.equipmentCategory)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.equipment)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipment)
                 mainVM.getEquipments(it.equipment)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.feats)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.feats)
                 mainVM.getFeats(it.feats)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.features)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.features)
                 mainVM.getFeatures(it.features)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.languages)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.languages)
                 mainVM.getLanguages(it.languages)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.magicItems)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicItems)
                 mainVM.getMagicItems(it.magicItems)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.magicSchools)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicSchools)
                 mainVM.getMagicSchool(it.magicSchools)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.monsters)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.monsters)
                 mainVM.getMonsters(it.monsters)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.proficiencies)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.proficiencies)
                 mainVM.getProficiencies(it.proficiencies)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.races)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.races)
                 mainVM.getRaces(it.races)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.rules)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.rules)
                 mainVM.getRules(it.rules)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.ruleSections)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.ruleSections)
                 mainVM.getRuleSections(it.ruleSections)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.skills)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.skills)
                 mainVM.getSkills(it.skills)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.spells)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.spells)
                 mainVM.getSpells(it.spells)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.subclasses)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subclasses)
                 mainVM.getSubclasses(it.subclasses)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.subraces)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subraces)
                 mainVM.getSubraces(it.subraces)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.traits)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.traits)
                 mainVM.getTraits(it.traits)
-                Log.d("debug", "--------------------------------------")
-                Log.d("debug", it.weaponProperties)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.weaponProperties)
                 mainVM.getWeaponProperties(it.weaponProperties)
+                loadedCategories.value++
+
+                delay(5000)
+                mainVM.setLoading(false)
             }
-            //showInitialButtons()
+        }
+        setContent {
+            Log.d("debug2", "SETTING CONTENT")
+            Log.d("debug2", isLoading.toString())
+            val numberOfLoadedCategories by loadedCategories
+            val currentlyDownloadingCategory by downloadingCategoryTitle
+
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = Color.LightGray
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (isLoading) {
+                        Text("Downloading Data")
+                        Text("This may take a couple of minutes")
+                        LinearProgressIndicator(progress = numberOfLoadedCategories / 22f)
+                        if (currentlyDownloadingCategory.isNotEmpty()) {
+                            Text("Downloading... $currentlyDownloadingCategory")
+                        }
+                    } else {
+                        showInitialButtons()
+                    }
+                }
+            }
         }
     }
 
     override fun onBackPressed() {
         //super.onBackPressed()
-        this.lifecycleScope.launch {
             showInitialButtons()
-        }
     }
 
-    private suspend fun showInitialButtons() {
-        mainVM.getCategories().onSuccess { references ->
+    private fun getCategoryStringFromUrl(url: String): String {
+        var newString = url.drop(5).replace("-", " ")
+        newString = newString.split(" ").joinToString(" ") { it.capitalize() }.trimEnd();
+        return newString
+    }
+
+    private fun showInitialButtons() {
             setContent {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -150,7 +211,6 @@ class MainActivity : ComponentActivity() {
                         item {
                             Button(
                                 onClick = {
-                                    Log.d("debug", references.abilityScore)
                                 }
                             ){
                                 Text("Ability Score")
@@ -158,126 +218,126 @@ class MainActivity : ComponentActivity() {
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.alignments) }
+                                onClick = {}
                             ){
                                 Text("Alignments")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.backgrounds) }
+                                onClick = {}
                             ){
                                 Text("Backgrounds")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.classes) }
+                                onClick = {}
                             ){
                                 Text("Classes")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.conditions) }
+                                onClick = {}
                             ){
                                 Text("Conditions")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.damageTypes) }
+                                onClick = {  }
                             ){
                                 Text("Damage Types")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.equipmentCategory) }
+                                onClick = {}
                             ){
                                 Text("Equipment Categories")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.equipment) }
+                                onClick = { }
                             ){
                                 Text("Equipment")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.feats) }
+                                onClick = {}
                             ){
                                 Text("Feats")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.features) }
+                                onClick = {}
                             ){
                                 Text("Features")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.languages) }
+                                onClick = { }
                             ){
                                 Text("Languages")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.magicItems) }
+                                onClick = { }
                             ){
                                 Text("Magic Items")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.magicSchools) }
+                                onClick = { }
                             ){
                                 Text("Magic Schools")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.monsters) }
+                                onClick = { }
                             ){
                                 Text("Monsters")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.proficiencies) }
+                                onClick = {  }
                             ){
                                 Text("Proficiencies")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.races) }
+                                onClick = { }
                             ){
                                 Text("Races")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.rules) }
+                                onClick = { }
                             ){
                                 Text("Rules")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.ruleSections) }
+                                onClick = {  }
                             ){
                                 Text("Rule Sections")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.skills) }
+                                onClick = { }
                             ){
                                 Text("Skills")
                             }
@@ -285,8 +345,7 @@ class MainActivity : ComponentActivity() {
                         item {
                             Button(
                                 onClick = {
-                                    Log.d("debug", references.spells)
-                                    showCardList(references.spells)
+                                    showSpellCardList()
 //                                    var listOfSpellsResult:  Result<List<Spell>> = Result.success(listOf())
 //                                    this@MainActivity.lifecycleScope.launch {
 //                                        listOfSpellsResult = mainVM.getSpells(references.spells)
@@ -300,28 +359,28 @@ class MainActivity : ComponentActivity() {
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.subclasses) }
+                                onClick = {}
                             ){
                                 Text("Subclasses")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.subraces) }
+                                onClick = { }
                             ){
                                 Text("Subraces")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.traits) }
+                                onClick = {  }
                             ){
                                 Text("Traits")
                             }
                         }
                         item {
                             Button(
-                                onClick = { Log.d("debug", references.weaponProperties) }
+                                onClick = { }
                             ){
                                 Text("Weapon Properties")
                             }
@@ -329,9 +388,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }.onFailure {
-            throw(Throwable("Unable to get the initial list"))
-        }
+
     }
 
     private inline fun <reified T> showGenericCardList(stuffResult: Result<List<T>>) {
@@ -440,18 +497,9 @@ class MainActivity : ComponentActivity() {
 //        }
     }
 
-    private fun showCardList(url: String) {
-        var spellList by mainVM.listOfSpells
-
-        this.lifecycleScope.launch {
-            mainVM.getSpells(url)
-        }
-
+    private fun showSpellCardList() {
         setContent {
-            Log.d("debug", "SETTING CONTENT")
-            val isLoading = mainVM.isLoading.value
             Log.d("debug", "LOADING: $isLoading")
-
             Surface(
                 color = Color.LightGray,
                 modifier = Modifier.fillMaxSize()
@@ -466,7 +514,7 @@ class MainActivity : ComponentActivity() {
                     }
                 } else {
                     Log.d("debug", "SHOWING CARDS")
-                    SpellCardList(spellList = spellList)
+                    SpellCardList(spellList = mainVM.listOfSpells.value)
                 }
             }
         }
