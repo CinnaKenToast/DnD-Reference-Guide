@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class MagicSchool(
     var index: String? = null,
     var name: String? = null,
-    @SerialName("desc") var description: MutableList<String>? = null,
+    @SerialName("desc") var description: String? = null,
     var url: String? = null
 )

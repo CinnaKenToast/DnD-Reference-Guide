@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.ui
 
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.deee_en_deee.infoTypes.*
@@ -16,7 +17,7 @@ class MainVM: ViewModel() {
     private val getter = APIGetter()
     val isLoading = mutableStateOf(true)
 
-    private val listOfAbilityScores: MutableList<AbilityScore> = mutableListOf()
+    /*private val listOfAbilityScores: MutableList<AbilityScore> = mutableListOf()
     private val listOfAlignments: MutableList<AlignmentType> = mutableListOf()
     private val listOfClasses: MutableList<ClassType> = mutableListOf()
     private val listOfConditions: MutableList<Condition> = mutableListOf()
@@ -38,7 +39,31 @@ class MainVM: ViewModel() {
     private val listOfSubclasses: MutableList<Subclass> = mutableListOf()
     private val listOfSubraces: MutableList<Subrace> = mutableListOf()
     private val listOfTraits: MutableList<Trait> = mutableListOf()
-    private val listOfWeaponProperties: MutableList<WeaponProperty> = mutableListOf()
+    private val listOfWeaponProperties: MutableList<WeaponProperty> = mutableListOf()*/
+
+    val listOfAbilityScores = mutableStateOf(mutableListOf<AbilityScore>())
+    val listOfAlignments = mutableStateOf(mutableListOf<AlignmentType>())
+    val listOfClasses = mutableStateOf(mutableListOf<ClassType>())
+    val listOfConditions = mutableStateOf(mutableListOf<Condition>())
+    val listOfDamageTypes = mutableStateOf(mutableListOf<DamageType>())
+    val listOfEquipmentCategories = mutableStateOf(mutableListOf<EquipmentCategory>())
+    val listOfEquipments = mutableStateOf(mutableListOf<Equipment>())
+    val listOfFeats = mutableStateOf(mutableListOf<Feat>())
+    val listOfFeatures = mutableStateOf(mutableListOf<Feature>())
+    val listOfLanguages = mutableStateOf(mutableListOf<Language>())
+    val listOfMagicItems = mutableStateOf(mutableListOf<MagicItem>())
+    val listOfMagicSchools = mutableStateOf(mutableListOf<MagicSchool>())
+    val listOfMonsters = mutableStateOf(mutableListOf<Monster>())
+    val listOfProficiencies = mutableStateOf(mutableListOf<Proficiency>())
+    val listOfRaces = mutableStateOf(mutableListOf<Race>())
+    val listOfRules = mutableStateOf(mutableListOf<Rule>())
+    val listOfRuleSections = mutableStateOf(mutableListOf<RuleSection>())
+    val listOfSkills = mutableStateOf(mutableListOf<Skill>())
+    val listOfSpells = mutableStateOf(mutableListOf<Spell>())
+    val listOfSubclasses = mutableStateOf(mutableListOf<Subclass>())
+    val listOfSubraces = mutableStateOf(mutableListOf<Subrace>())
+    val listOfTraits = mutableStateOf(mutableListOf<Trait>())
+    val listOfWeaponProperties = mutableStateOf(mutableListOf<WeaponProperty>())
 
     suspend fun getCategories(): Result<InitialReferences> {
         return getter.getInitialReferences()
@@ -46,20 +71,21 @@ class MainVM: ViewModel() {
 
     suspend fun getAbilityScores(url: String): Result<List<AbilityScore>> {
         isLoading.value = true
+        val abilityList by listOfAbilityScores
 
-        if (listOfAbilityScores.isNotEmpty()) {
+        if (abilityList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfAbilityScores)
+            return Result.success(abilityList)
         } else {
             getter.getCategoryResults(url).onSuccess { abilityScoreResults ->
                 Log.d("debug", "ADDING CARDS")
                 abilityScoreResults.results!!.forEach { result ->
                     val abilityScore = getter.getAbilityScore(result.url!!).getOrThrow()
-                    listOfAbilityScores.add(abilityScore)
+                    abilityList.add(abilityScore)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfAbilityScores)
+                return Result.success(abilityList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -70,20 +96,21 @@ class MainVM: ViewModel() {
 
     suspend fun getAlignments(url: String): Result<List<AlignmentType>> {
         isLoading.value = true
+        val alignmentList by listOfAlignments
 
-        if (listOfAlignments.isNotEmpty()) {
+        if (alignmentList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfAlignments)
+            return Result.success(alignmentList)
         } else {
             getter.getCategoryResults(url).onSuccess { alignmentResults ->
                 Log.d("debug", "ADDING CARDS")
                 alignmentResults.results!!.forEach { result ->
                     val abilityScore = getter.getAlignment(result.url!!).getOrThrow()
-                    listOfAlignments.add(abilityScore)
+                    alignmentList.add(abilityScore)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfAlignments)
+                return Result.success(alignmentList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -94,20 +121,21 @@ class MainVM: ViewModel() {
 
     suspend fun getClasses(url: String): Result<List<ClassType>> {
         isLoading.value = true
+        val classList by listOfClasses
 
-        if (listOfClasses.isNotEmpty()) {
+        if (classList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfClasses)
+            return Result.success(classList)
         } else {
             getter.getCategoryResults(url).onSuccess { classResults ->
                 Log.d("debug", "ADDING CARDS")
                 classResults.results!!.forEach { result ->
                     val classResult = getter.getClass(result.url!!).getOrThrow()
-                    listOfClasses.add(classResult)
+                    classList.add(classResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfClasses)
+                return Result.success(classList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -118,20 +146,21 @@ class MainVM: ViewModel() {
 
     suspend fun getConditions(url: String): Result<List<Condition>> {
         isLoading.value = true
+        val conditionList by listOfConditions
 
-        if (listOfConditions.isNotEmpty()) {
+        if (conditionList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfConditions)
+            return Result.success(conditionList)
         } else {
             getter.getCategoryResults(url).onSuccess { conditionResults ->
                 Log.d("debug", "ADDING CARDS")
                 conditionResults.results!!.forEach { result ->
                     val conditionResult = getter.getCondition(result.url!!).getOrThrow()
-                    listOfConditions.add(conditionResult)
+                    conditionList.add(conditionResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfConditions)
+                return Result.success(conditionList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -142,20 +171,21 @@ class MainVM: ViewModel() {
 
     suspend fun getDamageTypes(url: String): Result<List<DamageType>> {
         isLoading.value = true
+        val damageTypeList by listOfDamageTypes
 
-        if (listOfDamageTypes.isNotEmpty()) {
+        if (damageTypeList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfDamageTypes)
+            return Result.success(damageTypeList)
         } else {
             getter.getCategoryResults(url).onSuccess { damageTypeResults ->
                 Log.d("debug", "ADDING CARDS")
                 damageTypeResults.results!!.forEach { result ->
                     val damageTypeResult = getter.getDamageType(result.url!!).getOrThrow()
-                    listOfDamageTypes.add(damageTypeResult)
+                    damageTypeList.add(damageTypeResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfDamageTypes)
+                return Result.success(damageTypeList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -166,20 +196,21 @@ class MainVM: ViewModel() {
 
     suspend fun getEquipmentCategories(url: String): Result<List<EquipmentCategory>> {
         isLoading.value = true
+        val equipmentCategoryList by listOfEquipmentCategories
 
-        if (listOfEquipmentCategories.isNotEmpty()) {
+        if (equipmentCategoryList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfEquipmentCategories)
+            return Result.success(equipmentCategoryList)
         } else {
             getter.getCategoryResults(url).onSuccess { equipmentCategoriesResults ->
                 Log.d("debug", "ADDING CARDS")
                 equipmentCategoriesResults.results!!.forEach { result ->
                     val equipmentCategoryResult = getter.getEquipmentCategory(result.url!!).getOrThrow()
-                    listOfEquipmentCategories.add(equipmentCategoryResult)
+                    equipmentCategoryList.add(equipmentCategoryResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfEquipmentCategories)
+                return Result.success(equipmentCategoryList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -190,20 +221,21 @@ class MainVM: ViewModel() {
 
     suspend fun getEquipments(url: String): Result<List<Equipment>> {
         isLoading.value = true
+        val equipmentList by listOfEquipments
 
-        if (listOfEquipments.isNotEmpty()) {
+        if (equipmentList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfEquipments)
+            return Result.success(equipmentList)
         } else {
             getter.getCategoryResults(url).onSuccess { equipmentResults ->
                 Log.d("debug", "ADDING CARDS")
                 equipmentResults.results!!.forEach { result ->
                     val equipmentResult = getter.getEquipment(result.url!!).getOrThrow()
-                    listOfEquipments.add(equipmentResult)
+                    equipmentList.add(equipmentResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfEquipments)
+                return Result.success(equipmentList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -214,20 +246,21 @@ class MainVM: ViewModel() {
 
     suspend fun getFeats(url: String): Result<List<Feat>> {
         isLoading.value = true
+        val featList by listOfFeats
 
-        if (listOfFeats.isNotEmpty()) {
+        if (featList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfFeats)
+            return Result.success(featList)
         } else {
             getter.getCategoryResults(url).onSuccess { featResults ->
                 Log.d("debug", "ADDING CARDS")
                 featResults.results!!.forEach { result ->
                     val featResult = getter.getFeat(result.url!!).getOrThrow()
-                    listOfFeats.add(featResult)
+                    featList.add(featResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfFeats)
+                return Result.success(featList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -238,20 +271,21 @@ class MainVM: ViewModel() {
 
     suspend fun getFeatures(url: String): Result<List<Feature>> {
         isLoading.value = true
+        val featureList by listOfFeatures
 
-        if (listOfFeatures.isNotEmpty()) {
+        if (featureList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfFeatures)
+            return Result.success(featureList)
         } else {
             getter.getCategoryResults(url).onSuccess { featureResults ->
                 Log.d("debug", "ADDING CARDS")
                 featureResults.results!!.forEach { result ->
                     val featureResult = getter.getFeature(result.url!!).getOrThrow()
-                    listOfFeatures.add(featureResult)
+                    featureList.add(featureResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfFeatures)
+                return Result.success(featureList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -262,20 +296,21 @@ class MainVM: ViewModel() {
 
     suspend fun getLanguages(url: String): Result<List<Language>> {
         isLoading.value = true
+        val languageList by listOfLanguages
 
-        if (listOfLanguages.isNotEmpty()) {
+        if (languageList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfLanguages)
+            return Result.success(languageList)
         } else {
             getter.getCategoryResults(url).onSuccess { languageResults ->
                 Log.d("debug", "ADDING CARDS")
                 languageResults.results!!.forEach { result ->
                     val languageResult = getter.getLanguage(result.url!!).getOrThrow()
-                    listOfLanguages.add(languageResult)
+                    languageList.add(languageResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfLanguages)
+                return Result.success(languageList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -286,20 +321,21 @@ class MainVM: ViewModel() {
 
     suspend fun getMagicItems(url: String): Result<List<MagicItem>> {
         isLoading.value = true
+        val magicItemList by listOfMagicItems
 
-        if (listOfMagicItems.isNotEmpty()) {
+        if (magicItemList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfMagicItems)
+            return Result.success(magicItemList)
         } else {
             getter.getCategoryResults(url).onSuccess { magicItemResults ->
                 Log.d("debug", "ADDING CARDS")
                 magicItemResults.results!!.forEach { result ->
                     val magicItemResult = getter.getMagicItem(result.url!!).getOrThrow()
-                    listOfMagicItems.add(magicItemResult)
+                    magicItemList.add(magicItemResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfMagicItems)
+                return Result.success(magicItemList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -310,20 +346,21 @@ class MainVM: ViewModel() {
 
     suspend fun getMagicSchool(url: String): Result<List<MagicSchool>> {
         isLoading.value = true
+        val magicSchoolList by listOfMagicSchools
 
-        if (listOfMagicSchools.isNotEmpty()) {
+        if (magicSchoolList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfMagicSchools)
+            return Result.success(magicSchoolList)
         } else {
             getter.getCategoryResults(url).onSuccess { magicSchoolResults ->
                 Log.d("debug", "ADDING CARDS")
                 magicSchoolResults.results!!.forEach { result ->
                     val magicSchoolResult = getter.getMagicSchool(result.url!!).getOrThrow()
-                    listOfMagicSchools.add(magicSchoolResult)
+                    magicSchoolList.add(magicSchoolResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfMagicSchools)
+                return Result.success(magicSchoolList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -334,20 +371,21 @@ class MainVM: ViewModel() {
 
     suspend fun getMonsters(url: String): Result<List<Monster>> {
         isLoading.value = true
+        val monsterList by listOfMonsters
 
-        if (listOfMonsters.isNotEmpty()) {
+        if (monsterList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfMonsters)
+            return Result.success(monsterList)
         } else {
             getter.getCategoryResults(url).onSuccess { monsterResults ->
                 Log.d("debug", "ADDING CARDS")
                 monsterResults.results!!.forEach { result ->
                     val monsterResult = getter.getMonster(result.url!!).getOrThrow()
-                    listOfMonsters.add(monsterResult)
+                    monsterList.add(monsterResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfMonsters)
+                return Result.success(monsterList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -358,20 +396,21 @@ class MainVM: ViewModel() {
 
     suspend fun getProficiencies(url: String): Result<List<Proficiency>> {
         isLoading.value = true
+        val proficiencyList by listOfProficiencies
 
-        if (listOfProficiencies.isNotEmpty()) {
+        if (proficiencyList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfProficiencies)
+            return Result.success(proficiencyList)
         } else {
             getter.getCategoryResults(url).onSuccess { proficiencyResults ->
                 Log.d("debug", "ADDING CARDS")
                 proficiencyResults.results!!.forEach { result ->
                     val proficiencyResult = getter.getProficiency(result.url!!).getOrThrow()
-                    listOfProficiencies.add(proficiencyResult)
+                    proficiencyList.add(proficiencyResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfProficiencies)
+                return Result.success(proficiencyList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -382,20 +421,21 @@ class MainVM: ViewModel() {
 
     suspend fun getRaces(url: String): Result<List<Race>> {
         isLoading.value = true
+        val raceList by listOfRaces
 
-        if (listOfRaces.isNotEmpty()) {
+        if (raceList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfRaces)
+            return Result.success(raceList)
         } else {
             getter.getCategoryResults(url).onSuccess { raceResutls ->
                 Log.d("debug", "ADDING CARDS")
                 raceResutls.results!!.forEach { result ->
                     val raceResult = getter.getRace(result.url!!).getOrThrow()
-                    listOfRaces.add(raceResult)
+                    raceList.add(raceResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfRaces)
+                return Result.success(raceList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -406,20 +446,21 @@ class MainVM: ViewModel() {
 
     suspend fun getRules(url: String): Result<List<Rule>> {
         isLoading.value = true
+        val ruleList by listOfRules
 
-        if (listOfRules.isNotEmpty()) {
+        if (ruleList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfRules)
+            return Result.success(ruleList)
         } else {
             getter.getCategoryResults(url).onSuccess { ruleResults ->
                 Log.d("debug", "ADDING CARDS")
                 ruleResults.results!!.forEach { result ->
-                    val RuleResult = getter.getRule(result.url!!).getOrThrow()
-                    listOfRules.add(RuleResult)
+                    val ruleResult = getter.getRule(result.url!!).getOrThrow()
+                    ruleList.add(ruleResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfRules)
+                return Result.success(ruleList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -430,20 +471,21 @@ class MainVM: ViewModel() {
 
     suspend fun getRuleSections(url: String): Result<List<RuleSection>> {
         isLoading.value = true
+        val ruleSectionList by listOfRuleSections
 
-        if (listOfRuleSections.isNotEmpty()) {
+        if (ruleSectionList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfRuleSections)
+            return Result.success(ruleSectionList)
         } else {
             getter.getCategoryResults(url).onSuccess { ruleSectionResults ->
                 Log.d("debug", "ADDING CARDS")
                 ruleSectionResults.results!!.forEach { result ->
                     val ruleSectionResult = getter.getRuleSection(result.url!!).getOrThrow()
-                    listOfRuleSections.add(ruleSectionResult)
+                    ruleSectionList.add(ruleSectionResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfRuleSections)
+                return Result.success(ruleSectionList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -454,20 +496,21 @@ class MainVM: ViewModel() {
 
     suspend fun getSkills(url: String): Result<List<Skill>> {
         isLoading.value = true
+        val skillList by listOfSkills
 
-        if (listOfSkills.isNotEmpty()) {
+        if (skillList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfSkills)
+            return Result.success(skillList)
         } else {
             getter.getCategoryResults(url).onSuccess { skillResults ->
                 Log.d("debug", "ADDING CARDS")
                 skillResults.results!!.forEach { result ->
                     val skillResult = getter.getSkill(result.url!!).getOrThrow()
-                    listOfSkills.add(skillResult)
+                    skillList.add(skillResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfSkills)
+                return Result.success(skillList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -478,20 +521,21 @@ class MainVM: ViewModel() {
 
     suspend fun getSpells(url: String): Result<List<Spell>> {
         isLoading.value = true
+        val spellList by listOfSpells
 
-        if (listOfSpells.isNotEmpty()) {
+        if (spellList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfSpells)
+            return Result.success(spellList)
         } else {
             getter.getCategoryResults(url).onSuccess { spellResults ->
                 Log.d("debug", "ADDING CARDS")
                 spellResults.results!!.forEach { result ->
                     val spell = getter.getSpell(result.url!!).getOrThrow()
-                    listOfSpells.add(spell)
+                    spellList.add(spell)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfSpells)
+                return Result.success(spellList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -502,20 +546,21 @@ class MainVM: ViewModel() {
 
     suspend fun getSubclasses(url: String): Result<List<Subclass>> {
         isLoading.value = true
+        val subclassList by listOfSubclasses
 
-        if (listOfSubclasses.isNotEmpty()) {
+        if (subclassList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfSubclasses)
+            return Result.success(subclassList)
         } else {
             getter.getCategoryResults(url).onSuccess { subclassResults ->
                 Log.d("debug", "ADDING CARDS")
                 subclassResults.results!!.forEach { result ->
                     val subclassResult = getter.getSubclass(result.url!!).getOrThrow()
-                    listOfSubclasses.add(subclassResult)
+                    subclassList.add(subclassResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfSubclasses)
+                return Result.success(subclassList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -526,20 +571,21 @@ class MainVM: ViewModel() {
 
     suspend fun getSubraces(url: String): Result<List<Subrace>> {
         isLoading.value = true
+        val subraceList by listOfSubraces
 
-        if (listOfSubraces.isNotEmpty()) {
+        if (subraceList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfSubraces)
+            return Result.success(subraceList)
         } else {
             getter.getCategoryResults(url).onSuccess { subraceResults ->
                 Log.d("debug", "ADDING CARDS")
                 subraceResults.results!!.forEach { result ->
                     val subraceResult = getter.getSubrace(result.url!!).getOrThrow()
-                    listOfSubraces.add(subraceResult)
+                    subraceList.add(subraceResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfSubraces)
+                return Result.success(subraceList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -550,20 +596,21 @@ class MainVM: ViewModel() {
 
     suspend fun getTraits(url: String): Result<List<Trait>> {
         isLoading.value = true
+        val traitList by listOfTraits
 
-        if (listOfTraits.isNotEmpty()) {
+        if (traitList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfTraits)
+            return Result.success(traitList)
         } else {
             getter.getCategoryResults(url).onSuccess { traitResults ->
                 Log.d("debug", "ADDING CARDS")
                 traitResults.results!!.forEach { result ->
                     val traitResult = getter.getTrait(result.url!!).getOrThrow()
-                    listOfTraits.add(traitResult)
+                    traitList.add(traitResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfTraits)
+                return Result.success(traitList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -574,20 +621,21 @@ class MainVM: ViewModel() {
 
     suspend fun getWeaponProperties(url: String): Result<List<WeaponProperty>> {
         isLoading.value = true
+        val weaponPropertyList by listOfWeaponProperties
 
-        if (listOfWeaponProperties.isNotEmpty()) {
+        if (weaponPropertyList.isNotEmpty()) {
             isLoading.value = false
-            return Result.success(listOfWeaponProperties)
+            return Result.success(weaponPropertyList)
         } else {
             getter.getCategoryResults(url).onSuccess { weaponPropertyResults ->
                 Log.d("debug", "ADDING CARDS")
                 weaponPropertyResults.results!!.forEach { result ->
                     val weaponPropertyResult = getter.getWeaponProperty(result.url!!).getOrThrow()
-                    listOfWeaponProperties.add(weaponPropertyResult)
+                    weaponPropertyList.add(weaponPropertyResult)
                 }
                 Log.d("debug", "FINISHED ADDING CARDS")
                 isLoading.value = false
-                return Result.success(listOfWeaponProperties)
+                return Result.success(weaponPropertyList)
             }.onFailure {
                 return Result.failure(it)
             }
@@ -618,7 +666,7 @@ class APIGetter {
     }
 
     suspend fun getAlignment(url: String): Result<AlignmentType> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
+        return client.get("$BASE_URL/$url", listOf(UrlParameter(key = "", value = Any())))
     }
 
     suspend fun getClass(url: String): Result<ClassType> {

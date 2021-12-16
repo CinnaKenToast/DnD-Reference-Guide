@@ -7,6 +7,6 @@ data class AlignmentType(
     var index: String? = null,
     var name: String? = null,
     var abbrevitation: String? = null,
-    @SerialName("desc") var description: MutableList<String>? = null,
+    @SerialName("desc") var description: String? = null,
     var url: String? = null
 )

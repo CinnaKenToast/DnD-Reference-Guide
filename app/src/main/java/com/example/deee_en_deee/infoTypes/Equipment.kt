@@ -15,14 +15,20 @@ data class Equipment(
     @SerialName("str_minimum") var strengthMinimum: Int? = null,
     @SerialName("stealth_disadvantage") var stealthDisadvantage: Boolean? = null,
     @SerialName("gear_category") var gearCategory: APIReference? = null,
-    var contents: APIReference? = null,
+    var contents: MutableList<Content>? = null,
     var quantity: Int? = null,
     var cost: Cost? = null,
     var damage: Damage? = null,
     var range: Range? = null,
     var weight: Float? = null,
-    var properties: APIReference? = null,
+    var properties: MutableList<APIReference>? = null,
     var url: String? = null
+)
+
+@Serializable
+data class Content(
+    var item: APIReference? = null,
+    var quantity: Int? = null
 )
 
 @Serializable
