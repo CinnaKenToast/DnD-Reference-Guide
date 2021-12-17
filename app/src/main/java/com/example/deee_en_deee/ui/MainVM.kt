@@ -4,17 +4,18 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.deee_en_deee.infoTypes.*
-import com.example.deee_en_deee.utils.UrlParameter
-import com.example.deee_en_deee.utils.get
-import io.ktor.client.*
-import io.ktor.client.engine.android.*
+import com.example.deee_en_deee.services.APIGetter
+import com.example.deee_en_deee.services.FileManager
+import com.example.deee_en_deee.ui.components.capitalize
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-private const val STARTER_URL = "https://www.dnd5eapi.co/api/"
-private const val BASE_URL = "https://www.dnd5eapi.co"
 
 class MainVM: ViewModel() {
     private val getter = APIGetter()
+    private val fileManager = FileManager()
     val isLoading = mutableStateOf(true)
 
     /*private val listOfAbilityScores: MutableList<AbilityScore> = mutableListOf()
@@ -65,10 +66,121 @@ class MainVM: ViewModel() {
     val listOfTraits = mutableStateOf(mutableListOf<Trait>())
     val listOfWeaponProperties = mutableStateOf(mutableListOf<WeaponProperty>())
 
+    val loadedCategories = mutableStateOf(0)
+    val downloadingCategoryTitle = mutableStateOf("")
+
+    init {
+        viewModelScope.launch {
+            getCategories().onSuccess {
+                setLoading(true)
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.abilityScore)
+                getAbilityScores(it.abilityScore)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
+                getAlignments(it.alignments)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
+                getClasses(it.classes)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.conditions)
+                getConditions(it.conditions)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.damageTypes)
+                getDamageTypes(it.damageTypes)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipmentCategory)
+                getEquipmentCategories(it.equipmentCategory)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipment)
+                getEquipments(it.equipment)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.feats)
+                getFeats(it.feats)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.features)
+                getFeatures(it.features)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.languages)
+                getLanguages(it.languages)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicItems)
+                getMagicItems(it.magicItems)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicSchools)
+                getMagicSchool(it.magicSchools)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.monsters)
+                getMonsters(it.monsters)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.proficiencies)
+                getProficiencies(it.proficiencies)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.races)
+                getRaces(it.races)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.rules)
+                getRules(it.rules)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.ruleSections)
+                getRuleSections(it.ruleSections)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.skills)
+                getSkills(it.skills)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.spells)
+                getSpells(it.spells)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subclasses)
+                getSubclasses(it.subclasses)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subraces)
+                getSubraces(it.subraces)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.traits)
+                getTraits(it.traits)
+                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.weaponProperties)
+                getWeaponProperties(it.weaponProperties)
+                loadedCategories.value++
+
+                delay(5000)
+                setLoading(false)
+            }
+        }
+    }
+
+    private fun getCategoryStringFromUrl(url: String): String {
+        var newString = url.drop(5).replace("-", " ")
+        newString = newString.split(" ").joinToString(" ") { it.capitalize() }.trimEnd();
+        return newString
+    }
+
     fun setLoading(isLoading: Boolean) {
         this.isLoading.value = isLoading
     }
-
 
     suspend fun getCategories(): Result<InitialReferences> {
         return getter.getInitialReferences()
@@ -151,7 +263,6 @@ class MainVM: ViewModel() {
 
     suspend fun getEquipmentCategories(url: String) {
         val equipmentCategoryList by listOfEquipmentCategories
-
 
         getter.getCategoryResults(url).onSuccess { equipmentCategoriesResults ->
             Log.d("debug", "ADDING CARDS")
@@ -421,111 +532,3 @@ class MainVM: ViewModel() {
     }
 }
 
-class APIGetter {
-    private val client: HttpClient
-        get() = HttpClient(Android)
-
-    suspend fun getAPIReference(url: String): Result<APIReference> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getInitialReferences(): Result<InitialReferences> {
-        return client.get(STARTER_URL, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getCategoryResults(url: String): Result<ResourceList> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getAbilityScore(url: String): Result<AbilityScore> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getAlignment(url: String): Result<AlignmentType> {
-        return client.get("$BASE_URL/$url", listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getClass(url: String): Result<ClassType> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getCondition(url: String): Result<Condition> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getDamageType(url: String): Result<DamageType> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getEquipmentCategory(url: String): Result<EquipmentCategory> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getEquipment(url: String): Result<Equipment> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getFeat(url: String): Result<Feat> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getFeature(url: String): Result<Feature> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getLanguage(url: String): Result<Language> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getMagicItem(url: String): Result<MagicItem> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getMagicSchool(url: String): Result<MagicSchool> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getMonster(url: String): Result<Monster> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getProficiency(url: String): Result<Proficiency> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getRace(url: String): Result<Race> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getRule(url: String): Result<Rule> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getRuleSection(url: String): Result<RuleSection> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getSkill(url: String): Result<Skill> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getSpell(url: String): Result<Spell> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getSubclass(url: String): Result<Subclass> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getSubrace(url: String): Result<Subrace> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getTrait(url: String): Result<Trait> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-
-    suspend fun getWeaponProperty(url: String): Result<WeaponProperty> {
-        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
-    }
-}

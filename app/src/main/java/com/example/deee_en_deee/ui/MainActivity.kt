@@ -14,18 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.ui.components.SpellCardList
-import com.example.deee_en_deee.ui.components.capitalize
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private lateinit var mainVM: MainVM
-
-
-    val isLoading by mainVM.isLoading
 
 //    private val abilityScoreList by mainVM.listOfAbilityScores
 //    private val alignmentList by mainVM.listOfAlignments
@@ -56,114 +49,14 @@ class MainActivity : ComponentActivity() {
 
         mainVM = ViewModelProvider(this).get(MainVM::class.java)
 
-        val loadedCategories = mutableStateOf(0)
-        val downloadingCategoryTitle = mutableStateOf("")
-
-        this.lifecycleScope.launch {
-            mainVM.getCategories().onSuccess {
-                mainVM.setLoading(true)
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.abilityScore)
-                mainVM.getAbilityScores(it.abilityScore)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
-                mainVM.getAlignments(it.alignments)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
-                mainVM.getClasses(it.classes)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.conditions)
-                mainVM.getConditions(it.conditions)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.damageTypes)
-                mainVM.getDamageTypes(it.damageTypes)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipmentCategory)
-                mainVM.getEquipmentCategories(it.equipmentCategory)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipment)
-                mainVM.getEquipments(it.equipment)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.feats)
-                mainVM.getFeats(it.feats)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.features)
-                mainVM.getFeatures(it.features)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.languages)
-                mainVM.getLanguages(it.languages)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicItems)
-                mainVM.getMagicItems(it.magicItems)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicSchools)
-                mainVM.getMagicSchool(it.magicSchools)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.monsters)
-                mainVM.getMonsters(it.monsters)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.proficiencies)
-                mainVM.getProficiencies(it.proficiencies)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.races)
-                mainVM.getRaces(it.races)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.rules)
-                mainVM.getRules(it.rules)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.ruleSections)
-                mainVM.getRuleSections(it.ruleSections)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.skills)
-                mainVM.getSkills(it.skills)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.spells)
-                mainVM.getSpells(it.spells)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subclasses)
-                mainVM.getSubclasses(it.subclasses)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subraces)
-                mainVM.getSubraces(it.subraces)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.traits)
-                mainVM.getTraits(it.traits)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.weaponProperties)
-                mainVM.getWeaponProperties(it.weaponProperties)
-                loadedCategories.value++
-
-                delay(5000)
-                mainVM.setLoading(false)
-            }
-        }
         setContent {
+            val isLoading by mainVM.isLoading
+            val numberOfLoadedCategories by mainVM.loadedCategories
+            val currentlyDownloadingCategory by mainVM.downloadingCategoryTitle
+
+
             Log.d("debug2", "SETTING CONTENT")
             Log.d("debug2", isLoading.toString())
-            val numberOfLoadedCategories by loadedCategories
-            val currentlyDownloadingCategory by downloadingCategoryTitle
 
             Surface(
                 modifier = Modifier.fillMaxSize(),
@@ -190,14 +83,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onBackPressed() {
         //super.onBackPressed()
-            showInitialButtons()
+        showInitialButtons()
     }
 
-    private fun getCategoryStringFromUrl(url: String): String {
-        var newString = url.drop(5).replace("-", " ")
-        newString = newString.split(" ").joinToString(" ") { it.capitalize() }.trimEnd();
-        return newString
-    }
+
 
     private fun showInitialButtons() {
             setContent {
@@ -502,6 +391,7 @@ class MainActivity : ComponentActivity() {
 
     private fun showSpellCardList() {
         setContent {
+            val isLoading by mainVM.isLoading
             Log.d("debug", "LOADING: $isLoading")
             Surface(
                 color = Color.LightGray,
