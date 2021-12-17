@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.ui.components.SpellCardList
@@ -21,7 +22,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    private val mainVM = MainVM()
+    private lateinit var mainVM: MainVM
 
 
     val isLoading by mainVM.isLoading
@@ -52,6 +53,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        mainVM = ViewModelProvider(this).get(MainVM::class.java)
 
         val loadedCategories = mutableStateOf(0)
         val downloadingCategoryTitle = mutableStateOf("")
