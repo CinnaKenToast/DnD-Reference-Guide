@@ -47,7 +47,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mainVM = ViewModelProvider(this).get(MainVM::class.java)
+        val vmFactory = MainVMFactory(application = application)
+        Log.d("debug2", vmFactory.toString())
+        mainVM = ViewModelProvider(this, vmFactory).get(MainVM::class.java)
+        Log.d("debug2", mainVM.toString())
+
 
         setContent {
             val isLoading by mainVM.isLoading

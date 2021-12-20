@@ -1,22 +1,27 @@
 package com.example.deee_en_deee.ui
 
+import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.deee_en_deee.database.AbilityScoreDatabase
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.services.APIGetter
-import com.example.deee_en_deee.services.FileManager
 import com.example.deee_en_deee.ui.components.capitalize
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class MainVM: ViewModel() {
+class MainVM(application: Application): AndroidViewModel(application) {
+    private val context = getApplication<Application>().applicationContext
     private val getter = APIGetter()
-    private val fileManager = FileManager()
     val isLoading = mutableStateOf(true)
+
+    val abilityScoreDao = AbilityScoreDatabase.getInstance(context).abilityScoreDao()
 
     /*private val listOfAbilityScores: MutableList<AbilityScore> = mutableListOf()
     private val listOfAlignments: MutableList<AlignmentType> = mutableListOf()
@@ -71,100 +76,123 @@ class MainVM: ViewModel() {
 
     init {
         viewModelScope.launch {
-            getCategories().onSuccess {
+            getCategories().onSuccess { it ->
                 setLoading(true)
 
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.abilityScore)
-                getAbilityScores(it.abilityScore)
-                loadedCategories.value++
+                if (listOfAbilityScores.value.isEmpty()) {
+                    listOfAbilityScores.value = abilityScoreDao.getListOfAbilityScores()?.toMutableList() ?: mutableListOf()
 
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
-                getAlignments(it.alignments)
-                loadedCategories.value++
+                    Log.d("debug2", "ABILITY SCORE WAS EMPTY")
 
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
-                getClasses(it.classes)
-                loadedCategories.value++
+                    if (listOfAbilityScores.value.isEmpty()) {
+                        Log.d("debug2", "DATABASE WAS EMPTY")
+                        downloadingCategoryTitle.value = getCategoryStringFromUrl(it.abilityScore)
+                        getAbilityScores(it.abilityScore)
+                        loadedCategories.value++
 
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.conditions)
-                getConditions(it.conditions)
-                loadedCategories.value++
+                        listOfAbilityScores.value.forEach { abilityScore ->
+                            abilityScoreDao.insert(abilityScore)
+                        }
+                    } else {
+                        Log.d("debug2", "DATABASE WAS FULL")
+                    }
+                } else {
+                    Log.d("debug2", "ABILITY SCORE WAS FILLED")
+                }
 
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.damageTypes)
-                getDamageTypes(it.damageTypes)
-                loadedCategories.value++
 
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipmentCategory)
-                getEquipmentCategories(it.equipmentCategory)
-                loadedCategories.value++
+//
+//                listOfAbilityScores.value.forEach { abilityScore ->
+//                    abilityScoreDao.insert(abilityScore)
+//                }
 
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipment)
-                getEquipments(it.equipment)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.feats)
-                getFeats(it.feats)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.features)
-                getFeatures(it.features)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.languages)
-                getLanguages(it.languages)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicItems)
-                getMagicItems(it.magicItems)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicSchools)
-                getMagicSchool(it.magicSchools)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.monsters)
-                getMonsters(it.monsters)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.proficiencies)
-                getProficiencies(it.proficiencies)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.races)
-                getRaces(it.races)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.rules)
-                getRules(it.rules)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.ruleSections)
-                getRuleSections(it.ruleSections)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.skills)
-                getSkills(it.skills)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.spells)
-                getSpells(it.spells)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subclasses)
-                getSubclasses(it.subclasses)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subraces)
-                getSubraces(it.subraces)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.traits)
-                getTraits(it.traits)
-                loadedCategories.value++
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.weaponProperties)
-                getWeaponProperties(it.weaponProperties)
-                loadedCategories.value++
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
+//                getAlignments(it.alignments)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
+//                getClasses(it.classes)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.conditions)
+//                getConditions(it.conditions)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.damageTypes)
+//                getDamageTypes(it.damageTypes)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipmentCategory)
+//                getEquipmentCategories(it.equipmentCategory)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipment)
+//                getEquipments(it.equipment)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.feats)
+//                getFeats(it.feats)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.features)
+//                getFeatures(it.features)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.languages)
+//                getLanguages(it.languages)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicItems)
+//                getMagicItems(it.magicItems)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicSchools)
+//                getMagicSchool(it.magicSchools)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.monsters)
+//                getMonsters(it.monsters)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.proficiencies)
+//                getProficiencies(it.proficiencies)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.races)
+//                getRaces(it.races)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.rules)
+//                getRules(it.rules)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.ruleSections)
+//                getRuleSections(it.ruleSections)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.skills)
+//                getSkills(it.skills)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.spells)
+//                getSpells(it.spells)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subclasses)
+//                getSubclasses(it.subclasses)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subraces)
+//                getSubraces(it.subraces)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.traits)
+//                getTraits(it.traits)
+//                loadedCategories.value++
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.weaponProperties)
+//                getWeaponProperties(it.weaponProperties)
+//                loadedCategories.value++
 
                 delay(5000)
                 setLoading(false)
@@ -532,3 +560,8 @@ class MainVM: ViewModel() {
     }
 }
 
+class MainVMFactory(val application: Application): ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return modelClass.getConstructor(Application::class.java).newInstance(application)
+    }
+}
