@@ -10,7 +10,7 @@ data class AlignmentType(
     @PrimaryKey(autoGenerate = false)
     var index: String,
     var name: String? = null,
-    var abbrevitation: String? = null,
+    var abbreviation: String? = null,
     @SerialName("desc") var description: String? = null,
     var url: String? = null
 )

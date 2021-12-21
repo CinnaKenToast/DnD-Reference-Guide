@@ -8,9 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.deee_en_deee.database.AbilityScoreDatabase
-import com.example.deee_en_deee.database.AlignmentDatabase
-import com.example.deee_en_deee.database.ClassDatabase
+import com.example.deee_en_deee.database.*
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.services.APIGetter
 import com.example.deee_en_deee.ui.components.capitalize
@@ -26,6 +24,11 @@ class MainVM(application: Application): AndroidViewModel(application) {
     val abilityScoreDao = AbilityScoreDatabase.getInstance(context).abilityScoreDao()
     val alignmentDao = AlignmentDatabase.getInstance(context).alignmentDao()
     val classDao = ClassDatabase.getInstance(context).classDao()
+    val conditionDao = ConditionDatabase.getInstance(context).conditionDao()
+    val damageTypeDao = DamageTypeDatabase.getInstance(context).damageTypeDao()
+    val equipmentCategoryDao = EquipmentCategoryDatabase.getInstance(context).equipmentCategoryDao()
+    val equipmentDao = EquipmentDatabase.getInstance(context).equipmentDao()
+    val featDao = FeatDatabase.getInstance(context).featDao()
 
     /*private val listOfAbilityScores: MutableList<AbilityScore> = mutableListOf()
     private val listOfAlignments: MutableList<AlignmentType> = mutableListOf()
@@ -83,62 +86,82 @@ class MainVM(application: Application): AndroidViewModel(application) {
             getCategories().onSuccess { it ->
                 setLoading(true)
 
-                if (listOfAbilityScores.value.isEmpty()) {
-                    listOfAbilityScores.value = abilityScoreDao.getListOfAbilityScores()?.toMutableList() ?: mutableListOf()
-
-                    Log.d("debug2", "ABILITY SCORE WAS EMPTY")
-
-                    if (listOfAbilityScores.value.isEmpty()) {
-                        Log.d("debug2", "DATABASE WAS EMPTY")
-                        downloadingCategoryTitle.value = getCategoryStringFromUrl(it.abilityScore)
-                        getAbilityScores(it.abilityScore)
-                        loadedCategories.value++
-
-                        listOfAbilityScores.value.forEach { abilityScore ->
-                            abilityScoreDao.insert(abilityScore)
-                        }
-                    } else {
-                        Log.d("debug2", "DATABASE WAS FULL")
-                    }
-                } else {
-                    Log.d("debug2", "ABILITY SCORE WAS FILLED")
-                }
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
-                getAlignments(it.alignments)
-                loadedCategories.value++
-
-                listOfAlignments.value.forEach { alignmentType ->
-                    alignmentDao.insert(alignmentType)
-                }
-
-                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
-                getClasses(it.classes)
-                loadedCategories.value++
-
-                listOfClasses.value.forEach { classType ->
-                    classDao.insert(classType)
-                }
+//                if (listOfAbilityScores.value.isEmpty()) {
+//                    listOfAbilityScores.value = abilityScoreDao.getListOfAbilityScores()?.toMutableList() ?: mutableListOf()
+//
+//                    Log.d("debug2", "ABILITY SCORE WAS EMPTY")
+//
+//                    if (listOfAbilityScores.value.isEmpty()) {
+//                        Log.d("debug2", "DATABASE WAS EMPTY")
+//                        downloadingCategoryTitle.value = getCategoryStringFromUrl(it.abilityScore)
+//                        getAbilityScores(it.abilityScore)
+//                        loadedCategories.value++
+//
+//                        listOfAbilityScores.value.forEach { abilityScore ->
+//                            abilityScoreDao.insert(abilityScore)
+//                        }
+//                    } else {
+//                        Log.d("debug2", "DATABASE WAS FULL")
+//                    }
+//                } else {
+//                    Log.d("debug2", "ABILITY SCORE WAS FILLED")
+//                }
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
+//                getAlignments(it.alignments)
+//                loadedCategories.value++
+//
+//                listOfAlignments.value.forEach { alignmentType ->
+//                    alignmentDao.insert(alignmentType)
+//                }
+//
+//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
+//                getClasses(it.classes)
+//                loadedCategories.value++
+//
+//                listOfClasses.value.forEach { classType ->
+//                    classDao.insert(classType)
+//                }
 //
 //                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.conditions)
 //                getConditions(it.conditions)
 //                loadedCategories.value++
 //
+//                listOfConditions.value.forEach { condition ->
+//                    conditionDao.insert(condition)
+//                }
+//
 //                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.damageTypes)
 //                getDamageTypes(it.damageTypes)
 //                loadedCategories.value++
+//
+//                listOfDamageTypes.value.forEach { damageType ->
+//                    damageTypeDao.insert(damageType)
+//                }
 //
 //                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipmentCategory)
 //                getEquipmentCategories(it.equipmentCategory)
 //                loadedCategories.value++
 //
+//                listOfEquipmentCategories.value.forEach { equipmentCategory ->
+//                    equipmentCategoryDao.insert(equipmentCategory)
+//                }
+//
 //                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipment)
 //                getEquipments(it.equipment)
 //                loadedCategories.value++
 //
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.feats)
-//                getFeats(it.feats)
-//                loadedCategories.value++
+//                listOfEquipments.value.forEach { equipment ->
+//                    equipmentDao.insert(equipment)
+//                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.feats)
+                getFeats(it.feats)
+                loadedCategories.value++
+
+                listOfFeats.value.forEach { feat ->
+                    featDao.insert(feat)
+                }
 //
 //                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.features)
 //                getFeatures(it.features)
@@ -208,7 +231,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
 
     private fun getCategoryStringFromUrl(url: String): String {
         var newString = url.drop(5).replace("-", " ")
-        newString = newString.split(" ").joinToString(" ") { it.capitalize() }.trimEnd();
+        newString = newString.split(" ").joinToString(" ") { it.capitalize() }.trimEnd()
         return newString
     }
 
