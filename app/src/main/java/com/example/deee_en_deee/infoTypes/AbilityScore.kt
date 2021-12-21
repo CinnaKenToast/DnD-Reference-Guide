@@ -31,12 +31,12 @@ class AbilityScoreConverters {
     }
 
     @TypeConverter
-    fun skillsFromString(string: String?): List<APIReference>? {
+    fun apiReferencesFromString(string: String?): List<APIReference>? {
         return string?.fromJsonString<List<APIReference>>()
     }
 
     @TypeConverter
-    fun skillsToString(skills: MutableList<APIReference>?): String? {
-        return skills.toJsonString()
+    fun apiReferencesToString(apiReferencesToString: MutableList<APIReference>?): String? {
+        return apiReferencesToString.toJsonString()
     }
 }

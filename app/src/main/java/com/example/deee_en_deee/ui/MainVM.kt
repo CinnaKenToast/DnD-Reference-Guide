@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.deee_en_deee.database.AbilityScoreDatabase
+import com.example.deee_en_deee.database.AlignmentDatabase
+import com.example.deee_en_deee.database.ClassDatabase
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.services.APIGetter
 import com.example.deee_en_deee.ui.components.capitalize
@@ -22,6 +24,8 @@ class MainVM(application: Application): AndroidViewModel(application) {
     val isLoading = mutableStateOf(true)
 
     val abilityScoreDao = AbilityScoreDatabase.getInstance(context).abilityScoreDao()
+    val alignmentDao = AlignmentDatabase.getInstance(context).alignmentDao()
+    val classDao = ClassDatabase.getInstance(context).classDao()
 
     /*private val listOfAbilityScores: MutableList<AbilityScore> = mutableListOf()
     private val listOfAlignments: MutableList<AlignmentType> = mutableListOf()
@@ -100,19 +104,21 @@ class MainVM(application: Application): AndroidViewModel(application) {
                     Log.d("debug2", "ABILITY SCORE WAS FILLED")
                 }
 
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
+                getAlignments(it.alignments)
+                loadedCategories.value++
 
-//
-//                listOfAbilityScores.value.forEach { abilityScore ->
-//                    abilityScoreDao.insert(abilityScore)
-//                }
+                listOfAlignments.value.forEach { alignmentType ->
+                    alignmentDao.insert(alignmentType)
+                }
 
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
-//                getAlignments(it.alignments)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
-//                getClasses(it.classes)
-//                loadedCategories.value++
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
+                getClasses(it.classes)
+                loadedCategories.value++
+
+                listOfClasses.value.forEach { classType ->
+                    classDao.insert(classType)
+                }
 //
 //                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.conditions)
 //                getConditions(it.conditions)
