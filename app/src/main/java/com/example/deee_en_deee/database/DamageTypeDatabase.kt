@@ -5,7 +5,7 @@ import androidx.room.*
 import com.example.deee_en_deee.infoTypes.*
 
 @Database(entities = [DamageType::class], version = 1)
-@TypeConverters(DamageTypeConverters::class)
+@TypeConverters(Converters::class)
 abstract class DamageTypeDatabase: RoomDatabase() {
 
     abstract fun damageTypeDao(): DamageTypeDao

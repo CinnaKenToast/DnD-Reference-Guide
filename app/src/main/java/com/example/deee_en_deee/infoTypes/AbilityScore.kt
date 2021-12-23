@@ -19,24 +19,3 @@ data class AbilityScore(
     var skills: MutableList<APIReference>? = null,
     var url: String? = null
 )
-
-class AbilityScoreConverters {
-    @TypeConverter
-    fun descriptionFromString(string: String?): List<String>? {
-        return string?.fromJsonString<List<String>>()
-    }
-    @TypeConverter
-    fun descriptionToString(description: List<String>?): String? {
-        return description?.toJsonString()
-    }
-
-    @TypeConverter
-    fun apiReferencesFromString(string: String?): List<APIReference>? {
-        return string?.fromJsonString<List<APIReference>>()
-    }
-
-    @TypeConverter
-    fun apiReferencesToString(apiReferencesToString: MutableList<APIReference>?): String? {
-        return apiReferencesToString.toJsonString()
-    }
-}

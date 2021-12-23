@@ -19,28 +19,6 @@ data class Feat(
     var url: String? = null
 )
 
-class FeatConverters {
-    @TypeConverter
-    fun featPrerequisitesFromString(string: String?): List<FeatPrerequisite>? {
-        return string?.fromJsonString<List<FeatPrerequisite>>()
-    }
-
-    @TypeConverter
-    fun featPrerequisitesToString(featPrerequisites: List<FeatPrerequisite>): String? {
-        return featPrerequisites?.toJsonString()
-    }
-
-    @TypeConverter
-    fun stringsFromString(string: String?): List<String>? {
-        return string?.fromJsonString<List<String>>()
-    }
-
-    @TypeConverter
-    fun stringsToString(strings: List<String>?): String? {
-        return strings?.toJsonString()
-    }
-}
-
 @Serializable
 data class FeatPrerequisite(
     @SerialName("ability_score") val abilityScore: APIReference? = null,

@@ -1,10 +1,14 @@
 package com.example.deee_en_deee.infoTypes
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Entity(tableName = "race")
 @Serializable
 data class Race(
-    var index: String? = null,
+    @PrimaryKey(autoGenerate = false)
+    var index: String,
     var name: String? = null,
     var speed: Int? = null,
     @SerialName("ability_bonuses") var abilityBonuses: MutableList<AbilityBonus>? = null,

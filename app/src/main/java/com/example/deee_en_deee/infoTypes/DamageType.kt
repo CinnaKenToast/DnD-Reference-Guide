@@ -16,16 +16,3 @@ data class DamageType(
     @SerialName("desc") var description: MutableList<String>? = null,
     var url: String? = null
 )
-
-class DamageTypeConverters {
-    @TypeConverter
-    fun stringsFromString(string: String?): List<String>? {
-        return string?.fromJsonString<List<String>>()
-    }
-
-    @TypeConverter
-    fun stringsToString(strings: List<String>?): String? {
-        return strings?.toJsonString()
-    }
-
-}

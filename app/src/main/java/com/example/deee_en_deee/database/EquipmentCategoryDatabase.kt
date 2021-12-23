@@ -3,10 +3,9 @@ package com.example.deee_en_deee.database
 import android.content.Context
 import androidx.room.*
 import com.example.deee_en_deee.infoTypes.EquipmentCategory
-import com.example.deee_en_deee.infoTypes.EquipmentCategoryConverters
 
 @Database(entities = [EquipmentCategory::class], version = 1)
-@TypeConverters(EquipmentCategoryConverters::class)
+@TypeConverters(Converters::class)
 abstract class EquipmentCategoryDatabase: RoomDatabase() {
 
     abstract fun equipmentCategoryDao(): EquipmentCategoryDao

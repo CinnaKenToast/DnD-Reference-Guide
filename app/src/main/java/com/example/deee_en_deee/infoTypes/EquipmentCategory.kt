@@ -16,15 +16,3 @@ data class EquipmentCategory(
     var equipment: MutableList<APIReference>? = null,
     var url: String? = null
 )
-
-class EquipmentCategoryConverters {
-    @TypeConverter
-    fun apiReferencesFromString(string: String?): List<APIReference>? {
-        return string?.fromJsonString<List<APIReference>>()
-    }
-
-    @TypeConverter
-    fun apiReferencesToString(apiReferences: List<APIReference>?): String? {
-        return apiReferences?.toJsonString()
-    }
-}

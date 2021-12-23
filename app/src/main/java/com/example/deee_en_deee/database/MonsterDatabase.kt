@@ -5,24 +5,24 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.deee_en_deee.infoTypes.Equipment
+import com.example.deee_en_deee.infoTypes.Monster
 
-@Database(entities = [Equipment::class], version = 1)
+@Database(entities = [Monster::class], version = 1)
 @TypeConverters(Converters::class)
-abstract class EquipmentDatabase: RoomDatabase() {
+abstract class MonsterDatabase: RoomDatabase() {
 
-    abstract fun equipmentDao(): EquipmentDao
+    abstract fun monsterDao(): MonsterDao
 
     companion object {
         @Volatile
-        private var INSTANCE: EquipmentDatabase? = null
+        private var INSTANCE: MonsterDatabase? = null
 
-        fun getInstance(context: Context): EquipmentDatabase {
+        fun getInstance(context: Context): MonsterDatabase {
             synchronized(this) {
                 return INSTANCE ?: Room.databaseBuilder(
                     context,
-                    EquipmentDatabase::class.java,
-                    "equipment.db"
+                    MonsterDatabase::class.java,
+                    "monster.db"
                 ).build().also {
                     INSTANCE = it
                 }

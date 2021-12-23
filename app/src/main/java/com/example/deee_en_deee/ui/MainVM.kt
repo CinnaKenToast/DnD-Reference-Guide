@@ -29,6 +29,21 @@ class MainVM(application: Application): AndroidViewModel(application) {
     val equipmentCategoryDao = EquipmentCategoryDatabase.getInstance(context).equipmentCategoryDao()
     val equipmentDao = EquipmentDatabase.getInstance(context).equipmentDao()
     val featDao = FeatDatabase.getInstance(context).featDao()
+    val featureDao = FeatureDatabase.getInstance(context).featureDao()
+    val languageDao = LanguageDatabase.getInstance(context).languageDao()
+    val magicItemDao = MagicItemDatabase.getInstance(context).magicItemDao()
+    val magicSchoolDao = MagicSchoolDatabase.getInstance(context).magicSchoolDao()
+    val monsterDao = MonsterDatabase.getInstance(context).monsterDao()
+    val proficiencyDao = ProficiencyDatabase.getInstance(context).proficiencyDao()
+    val raceDao = RaceDatabase.getInstance(context).raceDao()
+    val ruleDao = RuleDatabase.getInstance(context).ruleDao()
+    val ruleSectionDao = RuleSectionDatabase.getInstance(context).ruleSectionDao()
+    val skillDao = SkillDatabase.getInstance(context).skillDao()
+    val spellDao = SpellDatabase.getInstance(context).spellDao()
+    val subclassDao = SubclassDatabase.getInstance(context).subclassDao()
+    val subraceDao = SubraceDatabase.getInstance(context).subraceDao()
+    val traitDao = TraitDatabase.getInstance(context).traitDao()
+    val weaponPropertyDao = WeaponPropertyDatabase.getInstance(context).weaponPropertyDao()
 
     /*private val listOfAbilityScores: MutableList<AbilityScore> = mutableListOf()
     private val listOfAlignments: MutableList<AlignmentType> = mutableListOf()
@@ -86,74 +101,74 @@ class MainVM(application: Application): AndroidViewModel(application) {
             getCategories().onSuccess { it ->
                 setLoading(true)
 
-//                if (listOfAbilityScores.value.isEmpty()) {
-//                    listOfAbilityScores.value = abilityScoreDao.getListOfAbilityScores()?.toMutableList() ?: mutableListOf()
-//
-//                    Log.d("debug2", "ABILITY SCORE WAS EMPTY")
-//
-//                    if (listOfAbilityScores.value.isEmpty()) {
-//                        Log.d("debug2", "DATABASE WAS EMPTY")
-//                        downloadingCategoryTitle.value = getCategoryStringFromUrl(it.abilityScore)
-//                        getAbilityScores(it.abilityScore)
-//                        loadedCategories.value++
-//
-//                        listOfAbilityScores.value.forEach { abilityScore ->
-//                            abilityScoreDao.insert(abilityScore)
-//                        }
-//                    } else {
-//                        Log.d("debug2", "DATABASE WAS FULL")
-//                    }
-//                } else {
-//                    Log.d("debug2", "ABILITY SCORE WAS FILLED")
-//                }
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
-//                getAlignments(it.alignments)
-//                loadedCategories.value++
-//
-//                listOfAlignments.value.forEach { alignmentType ->
-//                    alignmentDao.insert(alignmentType)
-//                }
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
-//                getClasses(it.classes)
-//                loadedCategories.value++
-//
-//                listOfClasses.value.forEach { classType ->
-//                    classDao.insert(classType)
-//                }
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.conditions)
-//                getConditions(it.conditions)
-//                loadedCategories.value++
-//
-//                listOfConditions.value.forEach { condition ->
-//                    conditionDao.insert(condition)
-//                }
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.damageTypes)
-//                getDamageTypes(it.damageTypes)
-//                loadedCategories.value++
-//
-//                listOfDamageTypes.value.forEach { damageType ->
-//                    damageTypeDao.insert(damageType)
-//                }
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipmentCategory)
-//                getEquipmentCategories(it.equipmentCategory)
-//                loadedCategories.value++
-//
-//                listOfEquipmentCategories.value.forEach { equipmentCategory ->
-//                    equipmentCategoryDao.insert(equipmentCategory)
-//                }
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipment)
-//                getEquipments(it.equipment)
-//                loadedCategories.value++
-//
-//                listOfEquipments.value.forEach { equipment ->
-//                    equipmentDao.insert(equipment)
-//                }
+                if (listOfAbilityScores.value.isEmpty()) {
+                    listOfAbilityScores.value = abilityScoreDao.getListOfAbilityScores()?.toMutableList() ?: mutableListOf()
+
+                    Log.d("debug2", "ABILITY SCORE WAS EMPTY")
+
+                    if (listOfAbilityScores.value.isEmpty()) {
+                        Log.d("debug2", "DATABASE WAS EMPTY")
+                        downloadingCategoryTitle.value = getCategoryStringFromUrl(it.abilityScore)
+                        getAbilityScores(it.abilityScore)
+                        loadedCategories.value++
+
+                        listOfAbilityScores.value.forEach { abilityScore ->
+                            abilityScoreDao.insert(abilityScore)
+                        }
+                    } else {
+                        Log.d("debug2", "DATABASE WAS FULL")
+                    }
+                } else {
+                    Log.d("debug2", "ABILITY SCORE WAS FILLED")
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.alignments)
+                getAlignments(it.alignments)
+                loadedCategories.value++
+
+                listOfAlignments.value.forEach { alignmentType ->
+                    alignmentDao.insert(alignmentType)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.classes)
+                getClasses(it.classes)
+                loadedCategories.value++
+
+                listOfClasses.value.forEach { classType ->
+                    classDao.insert(classType)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.conditions)
+                getConditions(it.conditions)
+                loadedCategories.value++
+
+                listOfConditions.value.forEach { condition ->
+                    conditionDao.insert(condition)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.damageTypes)
+                getDamageTypes(it.damageTypes)
+                loadedCategories.value++
+
+                listOfDamageTypes.value.forEach { damageType ->
+                    damageTypeDao.insert(damageType)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipmentCategory)
+                getEquipmentCategories(it.equipmentCategory)
+                loadedCategories.value++
+
+                listOfEquipmentCategories.value.forEach { equipmentCategory ->
+                    equipmentCategoryDao.insert(equipmentCategory)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.equipment)
+                getEquipments(it.equipment)
+                loadedCategories.value++
+
+                listOfEquipments.value.forEach { equipment ->
+                    equipmentDao.insert(equipment)
+                }
 
                 downloadingCategoryTitle.value = getCategoryStringFromUrl(it.feats)
                 getFeats(it.feats)
@@ -162,66 +177,126 @@ class MainVM(application: Application): AndroidViewModel(application) {
                 listOfFeats.value.forEach { feat ->
                     featDao.insert(feat)
                 }
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.features)
-//                getFeatures(it.features)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.languages)
-//                getLanguages(it.languages)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicItems)
-//                getMagicItems(it.magicItems)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicSchools)
-//                getMagicSchool(it.magicSchools)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.monsters)
-//                getMonsters(it.monsters)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.proficiencies)
-//                getProficiencies(it.proficiencies)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.races)
-//                getRaces(it.races)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.rules)
-//                getRules(it.rules)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.ruleSections)
-//                getRuleSections(it.ruleSections)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.skills)
-//                getSkills(it.skills)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.spells)
-//                getSpells(it.spells)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subclasses)
-//                getSubclasses(it.subclasses)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subraces)
-//                getSubraces(it.subraces)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.traits)
-//                getTraits(it.traits)
-//                loadedCategories.value++
-//
-//                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.weaponProperties)
-//                getWeaponProperties(it.weaponProperties)
-//                loadedCategories.value++
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.features)
+                getFeatures(it.features)
+                loadedCategories.value++
+
+                listOfFeatures.value.forEach { feature ->
+                    featureDao.insert(feature)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.languages)
+                getLanguages(it.languages)
+                loadedCategories.value++
+
+                listOfLanguages.value.forEach { language ->
+                    languageDao.insert(language)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicItems)
+                getMagicItems(it.magicItems)
+                loadedCategories.value++
+
+                listOfMagicItems.value.forEach { magicItem ->
+                    magicItemDao.insert(magicItem)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.magicSchools)
+                getMagicSchool(it.magicSchools)
+                loadedCategories.value++
+
+                listOfMagicSchools.value.forEach { magicSchool ->
+                    magicSchoolDao.insert(magicSchool)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.monsters)
+                getMonsters(it.monsters)
+                loadedCategories.value++
+
+                listOfMonsters.value.forEach { monster ->
+                    monsterDao.insert(monster)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.proficiencies)
+                getProficiencies(it.proficiencies)
+                loadedCategories.value++
+
+                listOfProficiencies.value.forEach { proficiency ->
+                    proficiencyDao.insert(proficiency)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.races)
+                getRaces(it.races)
+                loadedCategories.value++
+
+                listOfRaces.value.forEach { race ->
+                    raceDao.insert(race)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.rules)
+                getRules(it.rules)
+                loadedCategories.value++
+
+                listOfRules.value.forEach { rule ->
+                    ruleDao.insert(rule)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.ruleSections)
+                getRuleSections(it.ruleSections)
+                loadedCategories.value++
+
+                listOfRuleSections.value.forEach { ruleSection ->
+                    ruleSectionDao.insert(ruleSection)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.skills)
+                getSkills(it.skills)
+                loadedCategories.value++
+
+                listOfSkills.value.forEach { skill ->
+                    skillDao.insert(skill)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.spells)
+                getSpells(it.spells)
+                loadedCategories.value++
+
+                listOfSpells.value.forEach { spell ->
+                    spellDao.insert(spell)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subclasses)
+                getSubclasses(it.subclasses)
+                loadedCategories.value++
+
+                listOfSubclasses.value.forEach { subclass ->
+                    subclassDao.insert(subclass)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.subraces)
+                getSubraces(it.subraces)
+                loadedCategories.value++
+
+                listOfSubraces.value.forEach { subrace ->
+                    subraceDao.insert(subrace)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.traits)
+                getTraits(it.traits)
+                loadedCategories.value++
+
+                listOfTraits.value.forEach { trait ->
+                    traitDao.insert(trait)
+                }
+
+                downloadingCategoryTitle.value = getCategoryStringFromUrl(it.weaponProperties)
+                getWeaponProperties(it.weaponProperties)
+                loadedCategories.value++
+
+                listOfWeaponProperties.value.forEach { weaponProperty ->
+                    weaponPropertyDao.insert(weaponProperty)
+                }
 
                 delay(5000)
                 setLoading(false)

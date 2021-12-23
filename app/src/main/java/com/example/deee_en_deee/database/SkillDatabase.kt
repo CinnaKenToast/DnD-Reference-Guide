@@ -5,24 +5,24 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.deee_en_deee.infoTypes.Equipment
+import com.example.deee_en_deee.infoTypes.Skill
 
-@Database(entities = [Equipment::class], version = 1)
+@Database(entities = [Skill::class], version = 1)
 @TypeConverters(Converters::class)
-abstract class EquipmentDatabase: RoomDatabase() {
+abstract class SkillDatabase: RoomDatabase() {
 
-    abstract fun equipmentDao(): EquipmentDao
+    abstract fun skillDao(): SkillDao
 
     companion object {
         @Volatile
-        private var INSTANCE: EquipmentDatabase? = null
+        private var INSTANCE: SkillDatabase? = null
 
-        fun getInstance(context: Context): EquipmentDatabase {
+        fun getInstance(context: Context): SkillDatabase {
             synchronized(this) {
                 return INSTANCE ?: Room.databaseBuilder(
                     context,
-                    EquipmentDatabase::class.java,
-                    "equipment.db"
+                    SkillDatabase::class.java,
+                    "skill.db"
                 ).build().also {
                     INSTANCE = it
                 }
