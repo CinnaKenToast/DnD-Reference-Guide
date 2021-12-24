@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Entity(tableName = "Spell")
+@Entity(tableName = "spell")
 @Serializable
 data class Spell(
     @PrimaryKey(autoGenerate = false)
