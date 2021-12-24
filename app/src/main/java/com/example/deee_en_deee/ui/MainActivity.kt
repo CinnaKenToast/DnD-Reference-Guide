@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.example.deee_en_deee.infoTypes.*
+import com.example.deee_en_deee.ui.components.AbilityScoreCardList
 import com.example.deee_en_deee.ui.components.SpellCardList
 
 class MainActivity : ComponentActivity() {
@@ -107,6 +108,13 @@ class MainActivity : ComponentActivity() {
                         item {
                             Button(
                                 onClick = {
+                                    showAbilityCardList()
+//                                    var listOfSpellsResult:  Result<List<Spell>> = Result.success(listOf())
+//                                    this@MainActivity.lifecycleScope.launch {
+//                                        listOfSpellsResult = mainVM.getSpells(references.spells)
+//                                        Log.d("debug", listOfSpellsResult.toString())
+//                                    }
+//                                    showGenericCardList(listOfSpellsResult)
                                 }
                             ){
                                 Text("Ability Score")
@@ -117,13 +125,6 @@ class MainActivity : ComponentActivity() {
                                 onClick = {}
                             ){
                                 Text("Alignments")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = {}
-                            ){
-                                Text("Backgrounds")
                             }
                         }
                         item {
@@ -391,6 +392,30 @@ class MainActivity : ComponentActivity() {
 //            is Trait -> {}
 //            is WeaponProperty -> {}
 //        }
+    }
+
+    private fun showAbilityCardList() {
+        setContent {
+            val isLoading by mainVM.isLoading
+            Log.d("debug", "LOADING: $isLoading")
+            Surface(
+                color = Color.LightGray,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (isLoading) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Log.d("debug", "LOADING")
+                        CircularProgressIndicator()
+                    }
+                } else {
+                    Log.d("debug", "SHOWING CARDS")
+                    AbilityScoreCardList(abilityScoreList = mainVM.listOfAbilityScores.value)
+                }
+            }
+        }
     }
 
     private fun showSpellCardList() {

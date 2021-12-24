@@ -38,14 +38,14 @@ fun SpellCard(spell: Spell) {
     var openDialog by remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
-            .wrapContentWidth()
+            .fillMaxWidth()
             .wrapContentHeight()
             .clickable { openDialog = true }
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
-            BaseCard(spell = spell)
+            SpellBaseCard(spell = spell)
         }
     }
 
@@ -55,7 +55,7 @@ fun SpellCard(spell: Spell) {
 }
 
 @Composable
-fun BaseCard(spell: Spell) {
+fun SpellBaseCard(spell: Spell) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -102,7 +102,7 @@ fun BaseCard(spell: Spell) {
 }
 
 @Composable
-fun ExtendedCard(spell: Spell) {
+fun SpellExtendedCard(spell: Spell) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -287,10 +287,10 @@ fun SpellCardDialog(spell: Spell, onDismissRequest: () -> Unit){
                 modifier = Modifier.padding(8.dp)
             ) {
                 item{
-                    BaseCard(spell = spell)
+                    SpellBaseCard(spell = spell)
                 }
                 item{
-                    ExtendedCard(spell = spell)
+                    SpellExtendedCard(spell = spell)
                 }
             }
         }
