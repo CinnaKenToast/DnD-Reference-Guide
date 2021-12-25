@@ -109,12 +109,6 @@ class MainActivity : ComponentActivity() {
                             Button(
                                 onClick = {
                                     showAbilityCardList()
-//                                    var listOfSpellsResult:  Result<List<Spell>> = Result.success(listOf())
-//                                    this@MainActivity.lifecycleScope.launch {
-//                                        listOfSpellsResult = mainVM.getSpells(references.spells)
-//                                        Log.d("debug", listOfSpellsResult.toString())
-//                                    }
-//                                    showGenericCardList(listOfSpellsResult)
                                 }
                             ){
                                 Text("Ability Score")

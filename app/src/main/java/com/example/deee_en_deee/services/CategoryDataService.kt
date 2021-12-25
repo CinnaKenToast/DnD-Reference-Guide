@@ -1,16 +1,499 @@
 package com.example.deee_en_deee.services
 
 import android.content.Context
-import android.text.Layout
 import android.util.Log
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
+import com.example.deee_en_deee.database.*
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.ui.components.capitalize
 
 class CategoryDataService(context: Context) {
     private val getter = APIGetter()
 
-    private fun getCategoryStringFromUrl(url: String): String {
+    suspend fun checkAndSetAbilityScoreList(url: String, abilityScoreList: MutableState<List<AbilityScore>>, abilityScoreDao: AbilityScoreDao) {
+        if (abilityScoreList.value.isEmpty()) {
+            abilityScoreList.value = abilityScoreDao.getListOfAbilityScores()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ABILITY SCORE WAS EMPTY")
+
+            if (abilityScoreList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                abilityScoreList.value = getAbilityScores(url).getOrThrow()
+
+                abilityScoreList.value.forEach { abilityScore ->
+                    abilityScoreDao.insert(abilityScore)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ABILITY SCORE WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetAlignmentList(url: String, alignmentList: MutableState<List<AlignmentType>>, alignmentDao: AlignmentDao) {
+        if (alignmentList.value.isEmpty()) {
+            alignmentList.value = alignmentDao.getListOfAlignments()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (alignmentList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                alignmentList.value = getAlignments(url).getOrThrow()
+
+                alignmentList.value.forEach { alignment ->
+                    alignmentDao.insert(alignment)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetClassList(url: String, classList: MutableState<List<ClassType>>, classDao: ClassDao) {
+        if (classList.value.isEmpty()) {
+            classList.value = classDao.getListOfClasses()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (classList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                classList.value = getClasses(url).getOrThrow()
+
+                classList.value.forEach { classType ->
+                    classDao.insert(classType)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetConditionList(url: String, conditionList: MutableState<List<Condition>>, conditionDao: ConditionDao) {
+        if (conditionList.value.isEmpty()) {
+            conditionList.value = conditionDao.getListOfConditions()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (conditionList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                conditionList.value = getConditions(url).getOrThrow()
+
+                conditionList.value.forEach { condition ->
+                    conditionDao.insert(condition)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetDamageTypeList(url: String, damageTypeList: MutableState<List<DamageType>>, damageTypeDao: DamageTypeDao) {
+        if (damageTypeList.value.isEmpty()) {
+            damageTypeList.value = damageTypeDao.getListOfDamageTypes()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (damageTypeList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                damageTypeList.value = getDamageTypes(url).getOrThrow()
+
+                damageTypeList.value.forEach { damageType ->
+                    damageTypeDao.insert(damageType)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetEquipmentCategoryList(url: String, equipmentCategoryList: MutableState<List<EquipmentCategory>>, equipmentCategoryDao: EquipmentCategoryDao) {
+        if (equipmentCategoryList.value.isEmpty()) {
+            equipmentCategoryList.value = equipmentCategoryDao.getListOfEquipmentCategories()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (equipmentCategoryList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                equipmentCategoryList.value = getEquipmentCategories(url).getOrThrow()
+
+                equipmentCategoryList.value.forEach { equipmentCategory ->
+                    equipmentCategoryDao.insert(equipmentCategory)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetEquipmentList(url: String, equipmentList: MutableState<List<Equipment>>, equipmentDao: EquipmentDao) {
+        if (equipmentList.value.isEmpty()) {
+            equipmentList.value = equipmentDao.getListOfEquipments()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (equipmentList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                equipmentList.value = getEquipments(url).getOrThrow()
+
+                equipmentList.value.forEach { equipment ->
+                    equipmentDao.insert(equipment)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetFeatList(url: String, featList: MutableState<List<Feat>>, featDao: FeatDao) {
+        if (featList.value.isEmpty()) {
+            featList.value = featDao.getListOfFeats()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (featList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                featList.value = getFeats(url).getOrThrow()
+
+                featList.value.forEach { feat ->
+                    featDao.insert(feat)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetFeatureList(url: String, featureList: MutableState<List<Feature>>, featureDao: FeatureDao) {
+        if (featureList.value.isEmpty()) {
+            featureList.value = featureDao.getListOfFeatures()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (featureList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                featureList.value = getFeatures(url).getOrThrow()
+
+                featureList.value.forEach { feature ->
+                    featureDao.insert(feature)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetLanguageList(url: String, languageList: MutableState<List<Language>>, languageDao: LanguageDao) {
+        if (languageList.value.isEmpty()) {
+            languageList.value = languageDao.getListOfLanguages()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (languageList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                languageList.value = getLanguages(url).getOrThrow()
+
+                languageList.value.forEach { language ->
+                    languageDao.insert(language)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetMagicItemList(url: String, magicItemList: MutableState<List<MagicItem>>, magicItemDao: MagicItemDao) {
+        if (magicItemList.value.isEmpty()) {
+            magicItemList.value = magicItemDao.getListOfMagicItems()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (magicItemList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                magicItemList.value = getMagicItems(url).getOrThrow()
+
+                magicItemList.value.forEach { magicItem ->
+                    magicItemDao.insert(magicItem)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetMagicSchoolList(url: String, magicSchoolList: MutableState<List<MagicSchool>>, magicSchoolDao: MagicSchoolDao) {
+        if (magicSchoolList.value.isEmpty()) {
+            magicSchoolList.value = magicSchoolDao.getListOfMagicSchools()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (magicSchoolList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                magicSchoolList.value = getMagicSchool(url).getOrThrow()
+
+                magicSchoolList.value.forEach { magicSchool ->
+                    magicSchoolDao.insert(magicSchool)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetMonsterList(url: String, monsterList: MutableState<List<Monster>>, monsterDao: MonsterDao) {
+        if (monsterList.value.isEmpty()) {
+            monsterList.value = monsterDao.getListOfMonsters()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (monsterList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                monsterList.value = getMonsters(url).getOrThrow()
+
+                monsterList.value.forEach { monster ->
+                    monsterDao.insert(monster)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetProficiencyList(url: String, proficiencyList: MutableState<List<Proficiency>>, proficiencyDao: ProficiencyDao) {
+        if (proficiencyList.value.isEmpty()) {
+            proficiencyList.value = proficiencyDao.getListOfProficiencies()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (proficiencyList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                proficiencyList.value = getProficiencies(url).getOrThrow()
+
+                proficiencyList.value.forEach { proficiency ->
+                    proficiencyDao.insert(proficiency)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetRaceList(url: String, raceList: MutableState<List<Race>>, raceDao: RaceDao) {
+        if (raceList.value.isEmpty()) {
+            raceList.value = raceDao.getListOfRaces()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (raceList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                raceList.value = getRaces(url).getOrThrow()
+
+                raceList.value.forEach { race ->
+                    raceDao.insert(race)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetRuleList(url: String, ruleList: MutableState<List<Rule>>, ruleDao: RuleDao) {
+        if (ruleList.value.isEmpty()) {
+            ruleList.value = ruleDao.getListOfRules()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (ruleList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                ruleList.value = getRules(url).getOrThrow()
+
+                ruleList.value.forEach { rule ->
+                    ruleDao.insert(rule)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetRuleSectionList(url: String, ruleSectionList: MutableState<List<RuleSection>>, ruleSectionDao: RuleSectionDao) {
+        if (ruleSectionList.value.isEmpty()) {
+            ruleSectionList.value = ruleSectionDao.getListOfRuleSections()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (ruleSectionList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                ruleSectionList.value = getRuleSections(url).getOrThrow()
+
+                ruleSectionList.value.forEach { ruleSection ->
+                    ruleSectionDao.insert(ruleSection)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetSkillList(url: String, skillList: MutableState<List<Skill>>, skillDao: SkillDao) {
+        if (skillList.value.isEmpty()) {
+            skillList.value = skillDao.getListOfSkills()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (skillList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                skillList.value = getSkills(url).getOrThrow()
+
+                skillList.value.forEach { skill ->
+                    skillDao.insert(skill)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetSpellList(url: String, spellList: MutableState<List<Spell>>, spellDao: SpellDao) {
+        if (spellList.value.isEmpty()) {
+            spellList.value = spellDao.getListOfSpells()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (spellList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                spellList.value = getSpells(url).getOrThrow()
+
+                spellList.value.forEach { spell ->
+                    spellDao.insert(spell)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetSubclassList(url: String, subclassList: MutableState<List<Subclass>>, subclassDao: SubclassDao) {
+        if (subclassList.value.isEmpty()) {
+            subclassList.value = subclassDao.getListOfSubclasses()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (subclassList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                subclassList.value = getSubclasses(url).getOrThrow()
+
+                subclassList.value.forEach { subclass ->
+                    subclassDao.insert(subclass)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetSubraceList(url: String, subraceList: MutableState<List<Subrace>>, subraceDao: SubraceDao) {
+        if (subraceList.value.isEmpty()) {
+            subraceList.value = subraceDao.getListOfSubraces()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (subraceList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                subraceList.value = getSubraces(url).getOrThrow()
+
+                subraceList.value.forEach { subrace ->
+                    subraceDao.insert(subrace)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetTraitList(url: String, traitList: MutableState<List<Trait>>, traitDao: TraitDao) {
+        if (traitList.value.isEmpty()) {
+            traitList.value = traitDao.getListOfTraits()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (traitList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                traitList.value = getTraits(url).getOrThrow()
+
+                traitList.value.forEach { trait ->
+                    traitDao.insert(trait)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    suspend fun checkAndSetWeaponPropertyList(url: String, weaponPropertyList: MutableState<List<WeaponProperty>>, weaponPropertyDao: WeaponPropertyDao) {
+        if (weaponPropertyList.value.isEmpty()) {
+            weaponPropertyList.value = weaponPropertyDao.getListOfWeaponProperties()?.toMutableList() ?: mutableListOf()
+
+            Log.d("debug2", "ALIGNMENT WAS EMPTY")
+
+            if (weaponPropertyList.value.isEmpty()) {
+                Log.d("debug2", "DATABASE WAS EMPTY")
+                weaponPropertyList.value = getWeaponProperties(url).getOrThrow()
+
+                weaponPropertyList.value.forEach { weaponProperty ->
+                    weaponPropertyDao.insert(weaponProperty)
+                }
+            } else {
+                Log.d("debug2", "DATABASE WAS FULL")
+            }
+        } else {
+            Log.d("debug2", "ALIGNMENT WAS FILLED")
+        }
+    }
+
+    fun getCategoryStringFromUrl(url: String): String {
         var newString = url.drop(5).replace("-", " ")
         newString = newString.split(" ").joinToString(" ") { it.capitalize() }.trimEnd()
         return newString
