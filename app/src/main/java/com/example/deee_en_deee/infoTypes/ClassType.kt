@@ -19,7 +19,7 @@ data class ClassType(
     var proficiencies: MutableList<APIReference>?= null,
     @SerialName("saving_throws") var savingThrows: MutableList<APIReference>? = null,
     @SerialName("starting_equipment") var startingEquipment: MutableList<Inventory>? = null,
-    @SerialName("starting_equipment_options") var startingEquipmentOptions: MutableList<Choice>? = null,
+    @SerialName("starting_equipment_options") var startingEquipmentOptions: MutableList<StartingEquipmentChoice>? = null,
     //@SerialName("class_levels") var classLevels: MutableList<Level>? = null,
     @SerialName("class_levels") var classLevels: String? = null,
     @SerialName("multi_classing") var multiClassing: Multiclass? = null,
@@ -27,4 +27,12 @@ data class ClassType(
     var spellcasting: Spellcasting? = null,
     @SerialName("spells") var spellsURL: String? = null,
     var url: String? = null
+)
+
+
+@Serializable
+data class StartingEquipmentChoice(
+    var choose: Int? = null,
+    var type: String? = null,
+    var from: MutableList<Inventory>? = null
 )

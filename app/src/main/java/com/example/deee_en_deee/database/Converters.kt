@@ -235,4 +235,14 @@ class Converters {
     fun subclassSpellToString(subclassSpell: List<SubclassSpell>?): String? {
         return subclassSpell?.toJsonString()
     }
+
+    @TypeConverter
+    fun startingEquipmentChoicesFromString(string: String?): List<StartingEquipmentChoice>? {
+        return string?.fromJsonString<List<StartingEquipmentChoice>>()
+    }
+
+    @TypeConverter
+    fun startingEquipmentChoiceToString(startingEquipmentChoice: List<StartingEquipmentChoice>?): String? {
+        return startingEquipmentChoice?.toJsonString()
+    }
 }
