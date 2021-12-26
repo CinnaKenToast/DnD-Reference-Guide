@@ -16,4 +16,7 @@ interface DamageTypeDao {
 
     @Query("SELECT * FROM damageType")
     suspend fun getListOfDamageTypes(): List<DamageType>?
+
+    @Query("SELECT COUNT(*) == 0 FROM damageType")
+    suspend fun tableIsEmpty(): Boolean
 }

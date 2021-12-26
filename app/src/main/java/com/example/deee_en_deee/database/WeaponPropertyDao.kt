@@ -16,4 +16,7 @@ interface WeaponPropertyDao {
 
     @Query("SELECT * FROM weaponProperty")
     suspend fun getListOfWeaponProperties(): List<WeaponProperty>?
+
+    @Query("SELECT COUNT(*) == 0 FROM weaponProperty")
+    suspend fun tableIsEmpty(): Boolean
 }

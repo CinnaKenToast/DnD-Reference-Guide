@@ -16,4 +16,7 @@ interface AbilityScoreDao {
 
     @Query("SELECT * FROM abilityScore")
     suspend fun getListOfAbilityScores(): List<AbilityScore>?
+
+    @Query("SELECT COUNT(*) == 0 FROM abilityScore")
+    suspend fun tableIsEmpty(): Boolean
 }

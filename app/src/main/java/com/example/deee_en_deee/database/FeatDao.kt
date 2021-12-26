@@ -16,4 +16,7 @@ interface FeatDao {
 
     @Query("SELECT * FROM feat")
     suspend fun getListOfFeats(): List<Feat>?
+
+    @Query("SELECT COUNT(*) == 0 FROM feat")
+    suspend fun tableIsEmpty(): Boolean
 }

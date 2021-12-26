@@ -56,8 +56,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val isLoading by mainVM.isLoading
-            val numberOfLoadedCategories by mainVM.loadedCategories
-            val currentlyDownloadingCategory by mainVM.downloadingCategoryTitle
+//            val numberOfLoadedCategories by mainVM.loadedCategories
+//            val currentlyDownloadingCategory by mainVM.downloadingCategoryTitle
 
 
             Log.d("debug2", "SETTING CONTENT")
@@ -71,27 +71,25 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (isLoading) {
-                        Text("Downloading Data")
-                        Text("This may take a couple of minutes")
-                        LinearProgressIndicator(progress = numberOfLoadedCategories / 22f)
-                        if (currentlyDownloadingCategory.isNotEmpty()) {
-                            Text("Downloading... $currentlyDownloadingCategory")
-                        }
-                    } else {
+//                    if (isLoading) {
+//                        Text("Downloading Data")
+//                        Text("This may take a couple of minutes")
+//                        LinearProgressIndicator(progress = numberOfLoadedCategories / 22f)
+//                        if (currentlyDownloadingCategory.isNotEmpty()) {
+//                            Text("Downloading... $currentlyDownloadingCategory")
+//                        }
+//                    } else {
                         showInitialButtons()
                     }
                 }
             }
-        }
+//        }
     }
 
     override fun onBackPressed() {
         //super.onBackPressed()
         showInitialButtons()
     }
-
-
 
     private fun showInitialButtons() {
             setContent {
@@ -389,6 +387,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showAbilityCardList() {
+        mainVM.getAbilityScoreList()
         setContent {
             val isLoading by mainVM.isLoading
             Log.d("debug", "LOADING: $isLoading")
@@ -413,6 +412,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun showSpellCardList() {
+        mainVM.getSpellList()
         setContent {
             val isLoading by mainVM.isLoading
             Log.d("debug", "LOADING: $isLoading")

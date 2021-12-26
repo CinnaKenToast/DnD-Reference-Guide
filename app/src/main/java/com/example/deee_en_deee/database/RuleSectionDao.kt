@@ -16,4 +16,7 @@ interface RuleSectionDao {
 
     @Query("SELECT * FROM ruleSection")
     suspend fun getListOfRuleSections(): List<RuleSection>?
+
+    @Query("SELECT COUNT(*) == 0 FROM ruleSection")
+    suspend fun tableIsEmpty(): Boolean
 }

@@ -16,4 +16,7 @@ interface MagicItemDao {
 
     @Query("SELECT * FROM magicItem")
     suspend fun getListOfMagicItems(): List<MagicItem>?
+
+    @Query("SELECT COUNT(*) == 0 FROM magicItem")
+    suspend fun tableIsEmpty(): Boolean
 }

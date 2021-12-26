@@ -16,4 +16,7 @@ interface ProficiencyDao {
 
     @Query("SELECT * FROM proficiency")
     suspend fun getListOfProficiencies(): List<Proficiency>?
+
+    @Query("SELECT COUNT(*) == 0 FROM proficiency")
+    suspend fun tableIsEmpty(): Boolean
 }

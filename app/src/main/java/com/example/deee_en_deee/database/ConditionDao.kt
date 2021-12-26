@@ -16,4 +16,7 @@ interface ConditionDao {
 
     @Query("SELECT * FROM condition")
     suspend fun getListOfConditions(): List<Condition>?
+
+    @Query("SELECT COUNT(*) == 0 FROM condition")
+    suspend fun tableIsEmpty(): Boolean
 }

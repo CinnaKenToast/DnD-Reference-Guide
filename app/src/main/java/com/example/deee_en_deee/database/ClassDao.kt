@@ -16,4 +16,7 @@ interface ClassDao {
 
     @Query("SELECT * FROM classType")
     suspend fun getListOfClasses(): List<ClassType>?
+
+    @Query("SELECT COUNT(*) == 0 FROM classType")
+    suspend fun tableIsEmpty(): Boolean
 }

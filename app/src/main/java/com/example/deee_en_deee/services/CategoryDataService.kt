@@ -11,6 +11,7 @@ class CategoryDataService(context: Context) {
     private val getter = APIGetter()
 
     suspend fun checkAndSetAbilityScoreList(url: String, abilityScoreList: MutableState<List<AbilityScore>>, abilityScoreDao: AbilityScoreDao) {
+        Log.d("debug2", "CHECKING ABILITY SCORE")
         if (abilityScoreList.value.isEmpty()) {
             abilityScoreList.value = abilityScoreDao.getListOfAbilityScores()?.toMutableList() ?: mutableListOf()
 
@@ -23,11 +24,7 @@ class CategoryDataService(context: Context) {
                 abilityScoreList.value.forEach { abilityScore ->
                     abilityScoreDao.insert(abilityScore)
                 }
-            } else {
-                Log.d("debug2", "DATABASE WAS FULL")
             }
-        } else {
-            Log.d("debug2", "ABILITY SCORE WAS FILLED")
         }
     }
 

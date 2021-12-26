@@ -16,4 +16,7 @@ interface MonsterDao {
 
     @Query("SELECT * FROM monster")
     suspend fun getListOfMonsters(): List<Monster>?
+
+    @Query("SELECT COUNT(*) == 0 FROM monster")
+    suspend fun tableIsEmpty(): Boolean
 }

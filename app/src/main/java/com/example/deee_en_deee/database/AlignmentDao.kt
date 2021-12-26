@@ -16,4 +16,7 @@ interface AlignmentDao {
 
     @Query("SELECT * FROM alignmentType")
     suspend fun getListOfAlignments(): List<AlignmentType>?
+
+    @Query("SELECT COUNT(*) == 0 FROM alignmentType")
+    suspend fun tableIsEmpty(): Boolean
 }

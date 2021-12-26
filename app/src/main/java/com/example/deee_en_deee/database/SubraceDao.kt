@@ -16,4 +16,7 @@ interface SubraceDao {
 
     @Query("SELECT * FROM subrace")
     suspend fun getListOfSubraces(): List<Subrace>?
+
+    @Query("SELECT COUNT(*) == 0 FROM subrace")
+    suspend fun tableIsEmpty(): Boolean
 }

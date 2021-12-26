@@ -16,4 +16,7 @@ interface RaceDao {
 
     @Query("SELECT * FROM race")
     suspend fun getListOfRaces(): List<Race>?
+
+    @Query("SELECT COUNT(*) == 0 FROM race")
+    suspend fun tableIsEmpty(): Boolean
 }

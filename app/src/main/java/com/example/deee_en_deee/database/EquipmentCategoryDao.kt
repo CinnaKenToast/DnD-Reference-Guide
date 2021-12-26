@@ -16,4 +16,7 @@ interface EquipmentCategoryDao {
 
     @Query("SELECT * FROM equipmentCategory")
     suspend fun getListOfEquipmentCategories(): List<EquipmentCategory>?
+
+    @Query("SELECT COUNT(*) == 0 FROM equipmentCategory")
+    suspend fun tableIsEmpty(): Boolean
 }

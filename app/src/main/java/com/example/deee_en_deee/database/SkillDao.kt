@@ -16,4 +16,7 @@ interface SkillDao {
 
     @Query("SELECT * FROM skill")
     suspend fun getListOfSkills(): List<Skill>?
+
+    @Query("SELECT COUNT(*) == 0 FROM skill")
+    suspend fun tableIsEmpty(): Boolean
 }

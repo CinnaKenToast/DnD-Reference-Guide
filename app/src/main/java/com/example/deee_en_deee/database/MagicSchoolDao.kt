@@ -17,4 +17,7 @@ interface MagicSchoolDao {
 
     @Query("SELECT * FROM magicSchool")
     suspend fun getListOfMagicSchools(): List<MagicSchool>?
+
+    @Query("SELECT COUNT(*) == 0 FROM magicSchool")
+    suspend fun tableIsEmpty(): Boolean
 }

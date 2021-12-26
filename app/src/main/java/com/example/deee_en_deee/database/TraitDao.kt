@@ -16,4 +16,7 @@ interface TraitDao {
 
     @Query("SELECT * FROM trait")
     suspend fun getListOfTraits(): List<Trait>?
+
+    @Query("SELECT COUNT(*) == 0 FROM trait")
+    suspend fun tableIsEmpty(): Boolean
 }

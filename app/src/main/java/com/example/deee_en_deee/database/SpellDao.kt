@@ -17,4 +17,7 @@ interface SpellDao {
 
     @Query("SELECT * FROM spell")
     suspend fun getListOfSpells(): List<Spell>?
+
+    @Query("SELECT COUNT(*) == 0 FROM spell")
+    suspend fun tableIsEmpty(): Boolean
 }

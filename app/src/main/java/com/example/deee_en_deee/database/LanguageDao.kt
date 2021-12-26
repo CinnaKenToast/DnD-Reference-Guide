@@ -16,4 +16,7 @@ interface LanguageDao {
 
     @Query("SELECT * FROM language")
     suspend fun getListOfLanguages(): List<Language>?
+
+    @Query("SELECT COUNT(*) == 0 FROM language")
+    suspend fun tableIsEmpty(): Boolean
 }

@@ -17,4 +17,7 @@ interface RuleDao {
 
     @Query("SELECT * FROM rule")
     suspend fun getListOfRules(): List<Rule>?
+
+    @Query("SELECT COUNT(*) == 0 FROM rule")
+    suspend fun tableIsEmpty(): Boolean
 }

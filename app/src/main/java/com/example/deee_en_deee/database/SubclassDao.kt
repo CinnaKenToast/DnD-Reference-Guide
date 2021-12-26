@@ -16,4 +16,7 @@ interface SubclassDao {
 
     @Query("SELECT * FROM subclass")
     suspend fun getListOfSubclasses(): List<Subclass>?
+
+    @Query("SELECT COUNT(*) == 0 FROM subclass")
+    suspend fun tableIsEmpty(): Boolean
 }
