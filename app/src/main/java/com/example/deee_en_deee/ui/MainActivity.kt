@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.ui.components.AbilityScoreCardList
+import com.example.deee_en_deee.ui.components.AlignmentCardList
 import com.example.deee_en_deee.ui.components.SpellCardList
 
 class MainActivity : ComponentActivity() {
@@ -105,171 +106,161 @@ class MainActivity : ComponentActivity() {
                     ) {
                         item {
                             Button(
-                                onClick = {
-                                    showAbilityCardList()
-                                }
+                                onClick = { showAbilityCardList() }
                             ){
                                 Text("Ability Score")
                             }
                         }
                         item {
                             Button(
-                                onClick = {}
+                                onClick = { showAlignmentList() }
                             ){
                                 Text("Alignments")
                             }
                         }
                         item {
                             Button(
-                                onClick = {}
+                                onClick = { mainVM.getClassList() }
                             ){
                                 Text("Classes")
                             }
                         }
                         item {
                             Button(
-                                onClick = {}
+                                onClick = { mainVM.getConditionList() }
                             ){
                                 Text("Conditions")
                             }
                         }
                         item {
                             Button(
-                                onClick = {  }
+                                onClick = { mainVM.getDamageTypeList() }
                             ){
                                 Text("Damage Types")
                             }
                         }
                         item {
                             Button(
-                                onClick = {}
+                                onClick = { mainVM.getEquipmentCategoryList() }
                             ){
                                 Text("Equipment Categories")
                             }
                         }
                         item {
                             Button(
-                                onClick = { }
+                                onClick = { mainVM.getEquipmentList() }
                             ){
                                 Text("Equipment")
                             }
                         }
                         item {
                             Button(
-                                onClick = {}
+                                onClick = { mainVM.getFeatList() }
                             ){
                                 Text("Feats")
                             }
                         }
                         item {
                             Button(
-                                onClick = {}
+                                onClick = { mainVM.getFeatureList() }
                             ){
                                 Text("Features")
                             }
                         }
                         item {
                             Button(
-                                onClick = { }
+                                onClick = { mainVM.getLanguageList() }
                             ){
                                 Text("Languages")
                             }
                         }
                         item {
                             Button(
-                                onClick = { }
+                                onClick = { mainVM.getMagicItemList() }
                             ){
                                 Text("Magic Items")
                             }
                         }
                         item {
                             Button(
-                                onClick = { }
+                                onClick = { mainVM.getMagicSchoolList() }
                             ){
                                 Text("Magic Schools")
                             }
                         }
                         item {
                             Button(
-                                onClick = { }
+                                onClick = { mainVM.getMonsterList() }
                             ){
                                 Text("Monsters")
                             }
                         }
                         item {
                             Button(
-                                onClick = {  }
+                                onClick = { mainVM.getProficiencyList() }
                             ){
                                 Text("Proficiencies")
                             }
                         }
                         item {
                             Button(
-                                onClick = { }
+                                onClick = { mainVM.getRaceList() }
                             ){
                                 Text("Races")
                             }
                         }
                         item {
                             Button(
-                                onClick = { }
+                                onClick = { mainVM.getRuleList() }
                             ){
                                 Text("Rules")
                             }
                         }
                         item {
                             Button(
-                                onClick = {  }
+                                onClick = { mainVM.getRuleSectionList() }
                             ){
                                 Text("Rule Sections")
                             }
                         }
                         item {
                             Button(
-                                onClick = { }
+                                onClick = { mainVM.getSkillList() }
                             ){
                                 Text("Skills")
                             }
                         }
                         item {
                             Button(
-                                onClick = {
-                                    showSpellCardList()
-//                                    var listOfSpellsResult:  Result<List<Spell>> = Result.success(listOf())
-//                                    this@MainActivity.lifecycleScope.launch {
-//                                        listOfSpellsResult = mainVM.getSpells(references.spells)
-//                                        Log.d("debug", listOfSpellsResult.toString())
-//                                    }
-//                                    showGenericCardList(listOfSpellsResult)
-                                }
+                                onClick = { showSpellCardList() }
                             ){
                                 Text("Spells")
                             }
                         }
                         item {
                             Button(
-                                onClick = {}
+                                onClick = { mainVM.getSubclassList() }
                             ){
                                 Text("Subclasses")
                             }
                         }
                         item {
                             Button(
-                                onClick = { }
+                                onClick = { mainVM.getSubraceList() }
                             ){
                                 Text("Subraces")
                             }
                         }
                         item {
                             Button(
-                                onClick = {  }
+                                onClick = { mainVM.getTraitList() }
                             ){
                                 Text("Traits")
                             }
                         }
                         item {
                             Button(
-                                onClick = { }
+                                onClick = { mainVM.getWeaponPropertyList() }
                             ){
                                 Text("Weapon Properties")
                             }
@@ -406,6 +397,31 @@ class MainActivity : ComponentActivity() {
                 } else {
                     Log.d("debug", "SHOWING CARDS")
                     AbilityScoreCardList(abilityScoreList = mainVM.listOfAbilityScores.value)
+                }
+            }
+        }
+    }
+
+    private fun showAlignmentList() {
+        mainVM.getAlignmentList()
+        setContent {
+            val isLoading by mainVM.isLoading
+            Log.d("debug", "LOADING: $isLoading")
+            Surface(
+                color = Color.LightGray,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (isLoading) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Log.d("debug", "LOADING")
+                        CircularProgressIndicator()
+                    }
+                } else {
+                    Log.d("debug", "SHOWING CARDS")
+                    AlignmentCardList(alignmentList = mainVM.listOfAlignments.value)
                 }
             }
         }

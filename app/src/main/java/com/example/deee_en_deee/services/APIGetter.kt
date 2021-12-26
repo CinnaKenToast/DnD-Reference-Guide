@@ -30,7 +30,7 @@ class APIGetter {
     }
 
     suspend fun getAlignment(url: String): Result<AlignmentType> {
-        return client.get("$BASE_URL/$url", listOf(UrlParameter(key = "", value = Any())))
+        return client.get(BASE_URL + url, listOf(UrlParameter(key = "", value = Any())))
     }
 
     suspend fun getClass(url: String): Result<ClassType> {
