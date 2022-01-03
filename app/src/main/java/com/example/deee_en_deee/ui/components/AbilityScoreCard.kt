@@ -26,7 +26,6 @@ fun AbilityScoreCardList(abilityScoreList: List<AbilityScore>) {
         items(items = abilityScoreList) { abilityScore ->
             AbilityScoreCard(abilityScore)
         }
-
     }
 }
 
@@ -84,19 +83,21 @@ fun AbilityScoreExtendedCard(abilityScore: AbilityScore) {
         }
 
         abilityScore.skills?.let { skills ->
-            Column {
-                Text(
-                    text = "Skills:",
-                    fontWeight = FontWeight.Bold
-                )
-                val skillNames = mutableListOf<String>()
-                skills.forEach { skill ->
-                    skillNames.add(skill.name ?: "")
+            if (skills.isNotEmpty()) {
+                Column {
+                    Text(
+                        text = "Skills:",
+                        fontWeight = FontWeight.Bold
+                    )
+                    val skillNames = mutableListOf<String>()
+                    skills.forEach { skill ->
+                        skillNames.add(skill.name ?: "")
+                    }
+                    val text = skillNames.joinToString(separator = "\n").trimEnd()
+                    Text(
+                        text = text
+                    )
                 }
-                val text = skillNames.joinToString(separator = "\n").trimEnd()
-                Text(
-                    text = text
-                )
             }
         }
 

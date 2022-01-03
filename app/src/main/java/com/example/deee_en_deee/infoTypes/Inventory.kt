@@ -8,10 +8,15 @@ data class Inventory(
     var equipment: APIReference? = null,
     var quantity: Int? = null,
     var prerequisite: MutableList<ClassEquipmentPrerequisite>? = null,
-    @SerialName("equipment_category") var equipmentOption: BroadEquipmentChoice? = null,
+    @SerialName("equipment_category") var equipmentCategory: APIReference? = null,
     @SerialName("0") var firstPairItem: Inventory? = null,
-    @SerialName("1") var secondPairItem: EquipmentOptionCategory? = null
+    @SerialName("1") var secondPairItem: EquipmentOption? = null
 
+)
+
+@Serializable
+data class EquipmentOption(
+    @SerialName("equipment_option") var equipmentChoice: BroadEquipmentChoice? = null
 )
 
 @Serializable
@@ -23,5 +28,5 @@ data class BroadEquipmentChoice(
 
 @Serializable
 data class EquipmentOptionCategory(
-    @SerialName("equipment_option") var equipmentCategory: APIReference? = null,
+    @SerialName("equipment_category") var equipmentCategory: APIReference? = null
 )

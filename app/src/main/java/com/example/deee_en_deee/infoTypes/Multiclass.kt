@@ -12,6 +12,6 @@ data class Multiclass(
 
 @Serializable
 data class AbilityPrerequisite(
-    var abilityScore: AbilityScore? = null,
-    var minimumScore: Int? = null
+    @SerialName("ability_score") var abilityScore: APIReference? = null,
+    @SerialName("minimum_score") var minimumScore: Int? = null
 )
