@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
@@ -17,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.ui.components.AbilityScoreCardList
 import com.example.deee_en_deee.ui.components.AlignmentCardList
+import com.example.deee_en_deee.ui.components.ClassCardList
 import com.example.deee_en_deee.ui.components.SpellCardList
 
 class MainActivity : ComponentActivity() {
@@ -50,19 +52,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val vmFactory = MainVMFactory(application = application)
-        Log.d("debug2", vmFactory.toString())
         mainVM = ViewModelProvider(this, vmFactory).get(MainVM::class.java)
-        Log.d("debug2", mainVM.toString())
 
 
         setContent {
             val isLoading by mainVM.isLoading
-//            val numberOfLoadedCategories by mainVM.loadedCategories
-//            val currentlyDownloadingCategory by mainVM.downloadingCategoryTitle
-
-
-            Log.d("debug2", "SETTING CONTENT")
-            Log.d("debug2", isLoading.toString())
 
             Surface(
                 modifier = Modifier.fillMaxSize(),
@@ -80,7 +74,7 @@ class MainActivity : ComponentActivity() {
 //                            Text("Downloading... $currentlyDownloadingCategory")
 //                        }
 //                    } else {
-                        showInitialButtons()
+                        InitialButtons()
                     }
                 }
             }
@@ -89,10 +83,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onBackPressed() {
         //super.onBackPressed()
-        showInitialButtons()
+        setContent {
+            InitialButtons()
+        }
     }
 
-    private fun showInitialButtons() {
+    @Composable
+    private fun InitialButtons() {
             setContent {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -120,7 +117,7 @@ class MainActivity : ComponentActivity() {
                         }
                         item {
                             Button(
-                                onClick = { mainVM.getClassList() }
+                                onClick = { showClassCardList() }
                             ){
                                 Text("Classes")
                             }
@@ -426,6 +423,32 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    private fun showClassCardList() {
+        mainVM.getClassList()
+        setContent {
+            val isLoading by mainVM.isLoading
+            Log.d("debug", "LOADING: $isLoading")
+            Surface(
+                color = Color.LightGray,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                if (isLoading) {
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Log.d("debug", "LOADING")
+                        CircularProgressIndicator()
+                    }
+                } else {
+                    Log.d("debug", "SHOWING CARDS")
+                    ClassCardList(classList = mainVM.listOfClasses.value)
+                }
+            }
+        }
+    }
+
 
     private fun showSpellCardList() {
         mainVM.getSpellList()

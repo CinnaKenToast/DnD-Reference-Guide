@@ -7,16 +7,25 @@ import kotlinx.serialization.Serializable
 data class Inventory(
     var equipment: APIReference? = null,
     var quantity: Int? = null,
-    var prerequisite: MutableList<ClassEquipmentPrerequisite>? = null,
+    var prerequisites: MutableList<ClassEquipmentPrerequisite>? = null,
     @SerialName("equipment_category") var equipmentCategory: APIReference? = null,
-    @SerialName("0") var firstPairItem: Inventory? = null,
+    @SerialName("equipment_option") var equipmentChoice: BroadEquipmentChoice? = null,
+    @SerialName("0") var firstPairItem: ItemQuantity? = null,
     @SerialName("1") var secondPairItem: EquipmentOption? = null
 
 )
 
 @Serializable
+data class ItemQuantity(
+    var equipment: APIReference? = null,
+    var quantity: Int? = null
+)
+
+@Serializable
 data class EquipmentOption(
-    @SerialName("equipment_option") var equipmentChoice: BroadEquipmentChoice? = null
+    @SerialName("equipment_option") var equipmentChoice: BroadEquipmentChoice? = null,
+    var equipment: APIReference? = null,
+    var quantity: Int? = null
 )
 
 @Serializable
