@@ -15,6 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.ui.components.AbilityScoreCardList
 import com.example.deee_en_deee.ui.components.AlignmentCardList
@@ -56,8 +62,6 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            val isLoading by mainVM.isLoading
-
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = Color.LightGray
@@ -66,206 +70,218 @@ class MainActivity : ComponentActivity() {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-//                    if (isLoading) {
-//                        Text("Downloading Data")
-//                        Text("This may take a couple of minutes")
-//                        LinearProgressIndicator(progress = numberOfLoadedCategories / 22f)
-//                        if (currentlyDownloadingCategory.isNotEmpty()) {
-//                            Text("Downloading... $currentlyDownloadingCategory")
-//                        }
-//                    } else {
-                        InitialButtons()
-                    }
+                    AppNavigator()
                 }
             }
-//        }
+        }
     }
 
-    override fun onBackPressed() {
-        //super.onBackPressed()
-        setContent {
-            InitialButtons()
+//    override fun onBackPressed() {
+//        //super.onBackPressed()
+//        setContent {
+//            InitialButtons()
+//        }
+//    }
+
+    @Composable
+    fun AppNavigator() {
+        val navController = rememberNavController()
+        
+        NavHost(navController = navController, startDestination = "startPage"){
+            composable("startPage") { InitialButtons(navController = navController) }
+            composable("abilityList") { AbilityList(navController = navController) }
+            composable(
+                "abilityPage/{ability}",
+                arguments = listOf(
+                    navArgument("ability") { type = NavType.StringType }
+                )
+            ) { navBackStackEntry ->
+                navBackStackEntry.arguments?.getString("ability")?.let { ability ->
+                /*
+                   AbilityPage(navController = navController, ability = ability.fromJsonString<AbilityScore>())
+               */
+                }
+            }
+            composable("alignmentList") { AlignmentList(navController = navController) }
+            composable("classList") { ClassList(navController = navController) }
         }
     }
 
     @Composable
-    private fun InitialButtons() {
-            setContent {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.LightGray
-                ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        item {
-                            Button(
-                                onClick = { showAbilityCardList() }
-                            ){
-                                Text("Ability Score")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { showAlignmentList() }
-                            ){
-                                Text("Alignments")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { showClassCardList() }
-                            ){
-                                Text("Classes")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getConditionList() }
-                            ){
-                                Text("Conditions")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getDamageTypeList() }
-                            ){
-                                Text("Damage Types")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getEquipmentCategoryList() }
-                            ){
-                                Text("Equipment Categories")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getEquipmentList() }
-                            ){
-                                Text("Equipment")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getFeatList() }
-                            ){
-                                Text("Feats")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getFeatureList() }
-                            ){
-                                Text("Features")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getLanguageList() }
-                            ){
-                                Text("Languages")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getMagicItemList() }
-                            ){
-                                Text("Magic Items")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getMagicSchoolList() }
-                            ){
-                                Text("Magic Schools")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getMonsterList() }
-                            ){
-                                Text("Monsters")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getProficiencyList() }
-                            ){
-                                Text("Proficiencies")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getRaceList() }
-                            ){
-                                Text("Races")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getRuleList() }
-                            ){
-                                Text("Rules")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getRuleSectionList() }
-                            ){
-                                Text("Rule Sections")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getSkillList() }
-                            ){
-                                Text("Skills")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { showSpellCardList() }
-                            ){
-                                Text("Spells")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getSubclassList() }
-                            ){
-                                Text("Subclasses")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getSubraceList() }
-                            ){
-                                Text("Subraces")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getTraitList() }
-                            ){
-                                Text("Traits")
-                            }
-                        }
-                        item {
-                            Button(
-                                onClick = { mainVM.getWeaponPropertyList() }
-                            ){
-                                Text("Weapon Properties")
-                            }
-                        }
+    private fun InitialButtons(navController: NavController) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color.LightGray
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    Button(
+                        onClick = { navController.navigate("abilityList") }
+                    ){
+                        Text("Ability Score")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { navController.navigate("alignmentList") }
+                    ){
+                        Text("Alignments")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { navController.navigate("classList") }
+                    ){
+                        Text("Classes")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getConditionList() }
+                    ){
+                        Text("Conditions")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getDamageTypeList() }
+                    ){
+                        Text("Damage Types")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getEquipmentCategoryList() }
+                    ){
+                        Text("Equipment Categories")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getEquipmentList() }
+                    ){
+                        Text("Equipment")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getFeatList() }
+                    ){
+                        Text("Feats")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getFeatureList() }
+                    ){
+                        Text("Features")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getLanguageList() }
+                    ){
+                        Text("Languages")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getMagicItemList() }
+                    ){
+                        Text("Magic Items")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getMagicSchoolList() }
+                    ){
+                        Text("Magic Schools")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getMonsterList() }
+                    ){
+                        Text("Monsters")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getProficiencyList() }
+                    ){
+                        Text("Proficiencies")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getRaceList() }
+                    ){
+                        Text("Races")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getRuleList() }
+                    ){
+                        Text("Rules")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getRuleSectionList() }
+                    ){
+                        Text("Rule Sections")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getSkillList() }
+                    ){
+                        Text("Skills")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { showSpellCardList() }
+                    ){
+                        Text("Spells")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getSubclassList() }
+                    ){
+                        Text("Subclasses")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getSubraceList() }
+                    ){
+                        Text("Subraces")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getTraitList() }
+                    ){
+                        Text("Traits")
+                    }
+                }
+                item {
+                    Button(
+                        onClick = { mainVM.getWeaponPropertyList() }
+                    ){
+                        Text("Weapon Properties")
                     }
                 }
             }
-
+        }
     }
 
     private inline fun <reified T> showGenericCardList(stuffResult: Result<List<T>>) {
@@ -374,77 +390,78 @@ class MainActivity : ComponentActivity() {
 //        }
     }
 
-    private fun showAbilityCardList() {
+    @Composable
+    private fun AbilityList(navController: NavController) {
         mainVM.getAbilityScoreList()
-        setContent {
-            val isLoading by mainVM.isLoading
-            Log.d("debug", "LOADING: $isLoading")
-            Surface(
-                color = Color.LightGray,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                if (isLoading) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Log.d("debug", "LOADING")
-                        CircularProgressIndicator()
-                    }
-                } else {
-                    Log.d("debug", "SHOWING CARDS")
-                    AbilityScoreCardList(abilityScoreList = mainVM.listOfAbilityScores.value)
+
+        val isLoading by mainVM.isLoading
+        Log.d("debug", "LOADING: $isLoading")
+        Surface(
+            color = Color.LightGray,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if (isLoading) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Log.d("debug", "LOADING")
+                    CircularProgressIndicator()
                 }
+            } else {
+                Log.d("debug", "SHOWING CARDS")
+                AbilityScoreCardList(abilityScoreList = mainVM.listOfAbilityScores.value)
             }
         }
+
     }
 
-    private fun showAlignmentList() {
+    @Composable
+    private fun AlignmentList(navController: NavController) {
         mainVM.getAlignmentList()
-        setContent {
-            val isLoading by mainVM.isLoading
-            Log.d("debug", "LOADING: $isLoading")
-            Surface(
-                color = Color.LightGray,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                if (isLoading) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Log.d("debug", "LOADING")
-                        CircularProgressIndicator()
-                    }
-                } else {
-                    Log.d("debug", "SHOWING CARDS")
-                    AlignmentCardList(alignmentList = mainVM.listOfAlignments.value)
+
+        val isLoading by mainVM.isLoading
+        Log.d("debug", "LOADING: $isLoading")
+        Surface(
+            color = Color.LightGray,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if (isLoading) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Log.d("debug", "LOADING")
+                    CircularProgressIndicator()
                 }
+            } else {
+                Log.d("debug", "SHOWING CARDS")
+                AlignmentCardList(alignmentList = mainVM.listOfAlignments.value)
             }
-        }
+            }
     }
 
-    private fun showClassCardList() {
+    @Composable
+    private fun ClassList(navController: NavController) {
         mainVM.getClassList()
-        setContent {
-            val isLoading by mainVM.isLoading
-            Log.d("debug", "LOADING: $isLoading")
-            Surface(
-                color = Color.LightGray,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                if (isLoading) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Log.d("debug", "LOADING")
-                        CircularProgressIndicator()
-                    }
-                } else {
-                    Log.d("debug", "SHOWING CARDS")
-                    ClassCardList(classList = mainVM.listOfClasses.value)
+
+        val isLoading by mainVM.isLoading
+        Log.d("debug", "LOADING: $isLoading")
+        Surface(
+            color = Color.LightGray,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if (isLoading) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Log.d("debug", "LOADING")
+                    CircularProgressIndicator()
                 }
+            } else {
+                Log.d("debug", "SHOWING CARDS")
+                ClassCardList(classList = mainVM.listOfClasses.value)
             }
         }
     }
