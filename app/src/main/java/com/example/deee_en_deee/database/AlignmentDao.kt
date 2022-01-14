@@ -1,7 +1,6 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
-import com.example.deee_en_deee.infoTypes.AbilityScore
 import com.example.deee_en_deee.infoTypes.AlignmentType
 
 @Dao

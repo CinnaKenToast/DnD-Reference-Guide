@@ -1,8 +1,6 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
-import com.example.deee_en_deee.infoTypes.AlignmentType
-import com.example.deee_en_deee.infoTypes.Race
 import com.example.deee_en_deee.infoTypes.Rule
 
 @Dao
