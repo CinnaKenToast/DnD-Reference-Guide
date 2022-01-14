@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
@@ -86,7 +87,7 @@ class MainActivity : ComponentActivity() {
         
         NavHost(navController = navController, startDestination = "startPage"){
             composable("startPage") { InitialButtons(navController = navController) }
-            composable("abilityList") { AbilityList(navController = navController) }
+            composable("abilityList") { AbilityListScreen(navController = navController) }
             composable(
                 "abilityScorePage/{abilityIndex}",
                 arguments = listOf(
@@ -98,20 +99,30 @@ class MainActivity : ComponentActivity() {
                     AbilityScorePage(abilityScore = abilityScore)
                 }
             }
-            composable("alignmentList") { AlignmentList(navController = navController) }
+            composable("alignmentList") { AlignmentListScreen(navController = navController) }
             composable(
                 "alignmentPage/{alignmentIndex}",
                 arguments = listOf(
                     navArgument("alignmentIndex") { type = NavType.StringType }
                 )
             ) { navBackStackEntry ->
-            navBackStackEntry.arguments?.getString("alignmentIndex")?.let {alignmentIndex ->
-                val alignmentType = mainVM.getAlignmentType(alignmentIndex)
-                AlignmentPage(alignmentType = alignmentType)
+                navBackStackEntry.arguments?.getString("alignmentIndex")?.let {alignmentIndex ->
+                    val alignmentType = mainVM.getAlignmentType(alignmentIndex)
+                    AlignmentPage(alignmentType = alignmentType)
+                }
             }
-
+            composable("classList") { ClassListScreen(navController = navController) }
+            composable(
+                "classPage/{classIndex}",
+                arguments = listOf(
+                    navArgument("classIndex") { type = NavType.StringType }
+                )
+            ) { navBackStackEntry ->
+                navBackStackEntry.arguments?.getString("classIndex")?.let {classIndex ->
+                    val classType = mainVM.getClassType(classIndex)
+                    ClassPage(classType = classType)
+                }
             }
-            composable("classList") { ClassList(navController = navController) }
         }
     }
 
@@ -399,9 +410,11 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun AbilityList(navController: NavController) {
+    private fun AbilityListScreen(navController: NavController) {
         Log.d("debug", "STARTING ABILITY LIST")
-        mainVM.getAbilityScoreList()
+        LaunchedEffect(Unit) {
+            mainVM.getAbilityScoreList()
+        }
 
         val isLoading by mainVM.isLoading
         Log.d("debug", "LOADING: $isLoading")
@@ -422,12 +435,13 @@ class MainActivity : ComponentActivity() {
                 AbilityScoreCardList(abilityScoreList = mainVM.listOfAbilityScores.value, navController = navController)
             }
         }
-
     }
 
     @Composable
-    private fun AlignmentList(navController: NavController) {
-        mainVM.getAlignmentList()
+    private fun AlignmentListScreen(navController: NavController) {
+        LaunchedEffect(Unit) {
+            mainVM.getAlignmentList()
+        }
 
         val isLoading by mainVM.isLoading
         Log.d("debug", "LOADING: $isLoading")
@@ -451,8 +465,10 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun ClassList(navController: NavController) {
-        mainVM.getClassList()
+    private fun ClassListScreen(navController: NavController) {
+        LaunchedEffect(Unit) {
+            mainVM.getAbilityScoreList()
+        }
 
         val isLoading by mainVM.isLoading
         Log.d("debug", "LOADING: $isLoading")
@@ -470,7 +486,7 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
-                ClassCardList(classList = mainVM.listOfClasses.value)
+                ClassCardList(classList = mainVM.listOfClasses.value, navController)
             }
         }
     }
