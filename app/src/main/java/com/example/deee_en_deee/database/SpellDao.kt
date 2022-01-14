@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.ClassType
 import com.example.deee_en_deee.infoTypes.Spell
 
@@ -14,6 +15,9 @@ interface SpellDao {
 
     @Delete
     suspend fun delete(spell: Spell)
+
+    @Query("SELECT * FROM spell WHERE (:index == `index`)")
+    suspend fun getSpell(index: String): Spell
 
     @Query("SELECT * FROM spell")
     suspend fun getListOfSpells(): List<Spell>?

@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.Feat
 
 @Dao
@@ -13,6 +14,9 @@ interface FeatDao {
 
     @Delete
     suspend fun delete(feat: Feat)
+
+    @Query("SELECT * FROM feat WHERE (:index == `index`)")
+    suspend fun getFeat(index: String): Feat
 
     @Query("SELECT * FROM feat")
     suspend fun getListOfFeats(): List<Feat>?

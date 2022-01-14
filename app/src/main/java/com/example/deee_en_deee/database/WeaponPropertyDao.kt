@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.WeaponProperty
 
 @Dao
@@ -13,6 +14,9 @@ interface WeaponPropertyDao {
 
     @Delete
     suspend fun delete(weaponProperty: WeaponProperty)
+
+    @Query("SELECT * FROM weaponProperty WHERE (:index == `index`)")
+    suspend fun getWeaponProperty(index: String): WeaponProperty
 
     @Query("SELECT * FROM weaponProperty")
     suspend fun getListOfWeaponProperties(): List<WeaponProperty>?

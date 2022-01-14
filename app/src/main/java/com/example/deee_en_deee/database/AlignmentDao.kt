@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AbilityScore
 import com.example.deee_en_deee.infoTypes.AlignmentType
 
 @Dao
@@ -13,6 +14,9 @@ interface AlignmentDao {
 
     @Delete
     suspend fun delete(alignmentType: AlignmentType)
+
+    @Query("SELECT * FROM alignmentType WHERE (:index == `index`)")
+    suspend fun getAlignment(index: String): AlignmentType
 
     @Query("SELECT * FROM alignmentType")
     suspend fun getListOfAlignments(): List<AlignmentType>?

@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.Trait
 
 @Dao
@@ -13,6 +14,9 @@ interface TraitDao {
 
     @Delete
     suspend fun delete(trait: Trait)
+
+    @Query("SELECT * FROM trait WHERE (:index == `index`)")
+    suspend fun getTrait(index: String): Trait
 
     @Query("SELECT * FROM trait")
     suspend fun getListOfTraits(): List<Trait>?

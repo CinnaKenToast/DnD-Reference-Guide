@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.RuleSection
 
 @Dao
@@ -13,6 +14,9 @@ interface RuleSectionDao {
 
     @Delete
     suspend fun delete(ruleSection: RuleSection)
+
+    @Query("SELECT * FROM ruleSection WHERE (:index == `index`)")
+    suspend fun getRuleSection(index: String): RuleSection
 
     @Query("SELECT * FROM ruleSection")
     suspend fun getListOfRuleSections(): List<RuleSection>?

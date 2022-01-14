@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.DamageType
 
 @Dao
@@ -13,6 +14,9 @@ interface DamageTypeDao {
 
     @Delete
     suspend fun delete(damageType: DamageType)
+
+    @Query("SELECT * FROM damageType WHERE (:index == `index`)")
+    suspend fun getDamageType(index: String): DamageType
 
     @Query("SELECT * FROM damageType")
     suspend fun getListOfDamageTypes(): List<DamageType>?

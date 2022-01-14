@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.ClassType
 
 @Dao
@@ -13,6 +14,9 @@ interface ClassDao {
 
     @Delete
     suspend fun delete(classType: ClassType)
+
+    @Query("SELECT * FROM classType WHERE (:index == `index`)")
+    suspend fun getClass(index: String): ClassType
 
     @Query("SELECT * FROM classType")
     suspend fun getListOfClasses(): List<ClassType>?

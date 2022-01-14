@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.ClassType
 import com.example.deee_en_deee.infoTypes.MagicSchool
 
@@ -14,6 +15,9 @@ interface MagicSchoolDao {
 
     @Delete
     suspend fun delete(magicSchool: MagicSchool)
+
+    @Query("SELECT * FROM magicSchool WHERE (:index == `index`)")
+    suspend fun getMagicSchool(index: String): MagicSchool
 
     @Query("SELECT * FROM magicSchool")
     suspend fun getListOfMagicSchools(): List<MagicSchool>?

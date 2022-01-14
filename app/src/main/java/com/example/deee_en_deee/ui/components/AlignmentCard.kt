@@ -15,39 +15,35 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavController
 import com.example.deee_en_deee.infoTypes.*
 
 @Composable
-fun AlignmentCardList(alignmentList: List<AlignmentType>) {
+fun AlignmentCardList(alignmentList: List<AlignmentType>, navController: NavController) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(8.dp)
     ) {
-        items(items = alignmentList) { alignment ->
-            AlignmentCard(alignment)
+        items(items = alignmentList) { alignmentType ->
+            AlignmentCard(alignmentType, navController)
         }
 
     }
 }
 
 @Composable
-fun AlignmentCard(alignment: AlignmentType) {
-    var openDialog by remember { mutableStateOf(false) }
+fun AlignmentCard(alignmentType: AlignmentType, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .clickable { openDialog = true }
+            .clickable { navController.navigate("alignmentPage/${alignmentType.index}") }
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
-            AlignmentBaseCard(alignment = alignment)
+            AlignmentBaseCard(alignment = alignmentType)
         }
-    }
-
-    if (openDialog) {
-        AlignmentCardDialog(alignment = alignment, onDismissRequest = { openDialog = false })
     }
 }
 
@@ -85,6 +81,24 @@ fun AlignmentExtendedCard(alignment: AlignmentType) {
 }
 
 @Composable
+fun AlignmentPage(alignmentType: AlignmentType) {
+    Box(
+        modifier = Modifier.fillMaxHeight()
+    ) {
+        LazyColumn(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            item{
+                AlignmentBaseCard(alignment = alignmentType)
+            }
+            item{
+                AlignmentExtendedCard(alignment = alignmentType)
+            }
+        }
+    }
+}
+
+@Composable
 fun AlignmentCardDialog(alignment: AlignmentType, onDismissRequest: () -> Unit){
     Dialog(
         onDismissRequest = { onDismissRequest() }
@@ -113,7 +127,7 @@ fun AlignmentPreview() {
     val alignmentList = mutableListOf(
         alignmentType, alignmentType, alignmentType, alignmentType, alignmentType, alignmentType, alignmentType, alignmentType
     )
-    AlignmentCardList(alignmentList = alignmentList)
+//    AlignmentCardList(alignmentList = alignmentList)
 }
 
 val alignmentType = AlignmentType(

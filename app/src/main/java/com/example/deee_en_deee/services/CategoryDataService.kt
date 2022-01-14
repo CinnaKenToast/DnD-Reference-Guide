@@ -7,7 +7,7 @@ import com.example.deee_en_deee.database.*
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.ui.components.capitalize
 
-class CategoryDataService(context: Context) {
+class CategoryDataService() {
     private val getter = APIGetter()
 
     suspend fun checkAndSetAbilityScoreList(url: String, abilityScoreList: MutableState<List<AbilityScore>>, abilityScoreDao: AbilityScoreDao) {

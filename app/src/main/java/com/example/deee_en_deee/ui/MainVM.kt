@@ -11,11 +11,12 @@ import com.example.deee_en_deee.database.*
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.services.CategoryDataService
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class MainVM(application: Application): AndroidViewModel(application) {
     private val context = getApplication<Application>().applicationContext
-    private val categoryDataService = CategoryDataService(context)
+    private val categoryDataService = CategoryDataService()
     val isLoading = mutableStateOf(true)
 
     val abilityScoreDao = AbilityScoreDatabase.getInstance(context).abilityScoreDao()
@@ -114,12 +115,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return abilityScoreDao.tableIsEmpty()
     }
 
+    fun getAbilityScore(index: String): AbilityScore {
+        val abilityScore: AbilityScore
+        runBlocking {
+            setLoading(true)
+            abilityScore = abilityScoreDao.getAbilityScore(index)
+            setLoading(false)
+        }
+        return abilityScore
+    }
+
     fun getAbilityScoreList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isAbilityScoreEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetAbilityScoreList(listOfCategory.value.abilityScore, listOfAbilityScores, abilityScoreDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetAbilityScoreList(listOfCategory.value.abilityScore, listOfAbilityScores, abilityScoreDao)
+            setLoading(false)
         }
     }
 
@@ -127,12 +138,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return alignmentDao.tableIsEmpty()
     }
 
+    fun getAlignmentType(index: String): AlignmentType {
+        val alignmentType: AlignmentType
+        runBlocking {
+            setLoading(true)
+            alignmentType = alignmentDao.getAlignment(index)
+            setLoading(false)
+        }
+        return alignmentType
+    }
+
     fun getAlignmentList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isAlignmentEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetAlignmentList(listOfCategory.value.alignments, listOfAlignments, alignmentDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetAlignmentList(listOfCategory.value.alignments, listOfAlignments, alignmentDao)
+            setLoading(false)
         }
     }
 
@@ -140,12 +161,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return classDao.tableIsEmpty()
     }
 
+    fun getClassType(index: String): ClassType {
+        val classType: ClassType
+        runBlocking {
+            setLoading(true)
+            classType = classDao.getClass(index)
+            setLoading(false)
+        }
+        return classType
+    }
+
     fun getClassList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isClassEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetClassList(listOfCategory.value.classes, listOfClasses, classDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetClassList(listOfCategory.value.classes, listOfClasses, classDao)
+            setLoading(false)
         }
     }
 
@@ -153,12 +184,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return conditionDao.tableIsEmpty()
     }
 
+    fun getCondition(index: String): Condition {
+        val condition: Condition
+        runBlocking {
+            setLoading(true)
+            condition = conditionDao.getCondition(index)
+            setLoading(false)
+        }
+        return condition
+    }
+
     fun getConditionList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isConditionEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetConditionList(listOfCategory.value.conditions, listOfConditions, conditionDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetConditionList(listOfCategory.value.conditions, listOfConditions, conditionDao)
+            setLoading(false)
         }
     }
 
@@ -166,12 +207,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return damageTypeDao.tableIsEmpty()
     }
 
+    fun getDamageType(index: String): DamageType {
+        val damageType: DamageType
+        runBlocking {
+            setLoading(true)
+            damageType = damageTypeDao.getDamageType(index)
+            setLoading(false)
+        }
+        return damageType
+    }
+
     fun getDamageTypeList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isDamageTypeEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetDamageTypeList(listOfCategory.value.damageTypes, listOfDamageTypes, damageTypeDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetDamageTypeList(listOfCategory.value.damageTypes, listOfDamageTypes, damageTypeDao)
+            setLoading(false)
         }
     }
 
@@ -179,12 +230,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return equipmentCategoryDao.tableIsEmpty()
     }
 
+    fun getEquipmentCategory(index: String): EquipmentCategory {
+        val equipmentCategory: EquipmentCategory
+        runBlocking {
+            setLoading(true)
+            equipmentCategory = equipmentCategoryDao.getEquipmentCategory(index)
+            setLoading(false)
+        }
+        return equipmentCategory
+    }
+
     fun getEquipmentCategoryList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isEquipmentCategoryEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetEquipmentCategoryList(listOfCategory.value.equipmentCategory, listOfEquipmentCategories, equipmentCategoryDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetEquipmentCategoryList(listOfCategory.value.equipmentCategory, listOfEquipmentCategories, equipmentCategoryDao)
+            setLoading(false)
         }
     }
 
@@ -192,12 +253,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return equipmentDao.tableIsEmpty()
     }
 
+    fun getEquipment(index: String): Equipment {
+        val equipment: Equipment
+        runBlocking {
+            setLoading(true)
+            equipment = equipmentDao.getEquipment(index)
+            setLoading(false)
+        }
+        return equipment
+    }
+
     fun getEquipmentList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isEquipmentEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetEquipmentList(listOfCategory.value.equipment, listOfEquipments, equipmentDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetEquipmentList(listOfCategory.value.equipment, listOfEquipments, equipmentDao)
+            setLoading(false)
         }
     }
 
@@ -205,12 +276,23 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return featDao.tableIsEmpty()
     }
 
+    fun getFeat(index: String): Feat {
+        val feat: Feat
+        runBlocking {
+            setLoading(true)
+            feat = featDao.getFeat(index)
+            setLoading(false)
+        }
+        return feat
+    }
+
+
     fun getFeatList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isFeatEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetFeatList(listOfCategory.value.feats, listOfFeats, featDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetFeatList(listOfCategory.value.feats, listOfFeats, featDao)
+            setLoading(false)
         }
     }
 
@@ -218,12 +300,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return featureDao.tableIsEmpty()
     }
 
+    fun getFeature(index: String): Feature {
+        val feature: Feature
+        runBlocking {
+            setLoading(true)
+            feature = featureDao.getFeature(index)
+            setLoading(false)
+        }
+        return feature
+    }
+
     fun getFeatureList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isFeatureEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetFeatureList(listOfCategory.value.features, listOfFeatures, featureDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetFeatureList(listOfCategory.value.features, listOfFeatures, featureDao)
+            setLoading(false)
         }
     }
 
@@ -231,12 +323,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return languageDao.tableIsEmpty()
     }
 
+    fun getLanguage(index: String): Language {
+        val language: Language
+        runBlocking {
+            setLoading(true)
+            language = languageDao.getLanguage(index)
+            setLoading(false)
+        }
+        return language
+    }
+
     fun getLanguageList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isLanguageEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetLanguageList(listOfCategory.value.languages, listOfLanguages, languageDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetLanguageList(listOfCategory.value.languages, listOfLanguages, languageDao)
+            setLoading(false)
         }
     }
 
@@ -244,12 +346,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return magicItemDao.tableIsEmpty()
     }
 
+    fun getMagicItem(index: String): MagicItem {
+        val magicItem: MagicItem
+        runBlocking {
+            setLoading(true)
+            magicItem = magicItemDao.getMagicItem(index)
+            setLoading(false)
+        }
+        return magicItem
+    }
+
     fun getMagicItemList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isMagicItemEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetMagicItemList(listOfCategory.value.magicItems, listOfMagicItems, magicItemDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetMagicItemList(listOfCategory.value.magicItems, listOfMagicItems, magicItemDao)
+            setLoading(false)
         }
     }
 
@@ -257,12 +369,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return magicSchoolDao.tableIsEmpty()
     }
 
+    fun getMagicSchool(index: String): MagicSchool {
+        val magicSchool: MagicSchool
+        runBlocking {
+            setLoading(true)
+            magicSchool = magicSchoolDao.getMagicSchool(index)
+            setLoading(false)
+        }
+        return magicSchool
+    }
+
     fun getMagicSchoolList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isMagicSchoolEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetMagicSchoolList(listOfCategory.value.magicSchools, listOfMagicSchools, magicSchoolDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetMagicSchoolList(listOfCategory.value.magicSchools, listOfMagicSchools, magicSchoolDao)
+            setLoading(false)
         }
     }
 
@@ -270,12 +392,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return monsterDao.tableIsEmpty()
     }
 
+    fun getMonster(index: String): Monster {
+        val monster: Monster
+        runBlocking {
+            setLoading(true)
+            monster = monsterDao.getMonster(index)
+            setLoading(false)
+        }
+        return monster
+    }
+
     fun getMonsterList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isMonsterEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetMonsterList(listOfCategory.value.monsters, listOfMonsters, monsterDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetMonsterList(listOfCategory.value.monsters, listOfMonsters, monsterDao)
+            setLoading(false)
         }
     }
 
@@ -283,12 +415,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return proficiencyDao.tableIsEmpty()
     }
 
+    fun getProficiency(index: String): Proficiency {
+        val proficiency: Proficiency
+        runBlocking {
+            setLoading(true)
+            proficiency = proficiencyDao.getProficiency(index)
+            setLoading(false)
+        }
+        return proficiency
+    }
+
     fun getProficiencyList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isProficiencyEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetProficiencyList(listOfCategory.value.abilityScore, listOfProficiencies, proficiencyDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetProficiencyList(listOfCategory.value.abilityScore, listOfProficiencies, proficiencyDao)
+            setLoading(false)
         }
     }
 
@@ -296,12 +438,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return raceDao.tableIsEmpty()
     }
 
+    fun getRace(index: String): Race {
+        val race: Race
+        runBlocking {
+            setLoading(true)
+            race = raceDao.getRace(index)
+            setLoading(false)
+        }
+        return race
+    }
+
     fun getRaceList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isRaceEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetRaceList(listOfCategory.value.races, listOfRaces, raceDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetRaceList(listOfCategory.value.races, listOfRaces, raceDao)
+            setLoading(false)
         }
     }
 
@@ -309,12 +461,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return ruleDao.tableIsEmpty()
     }
 
+    fun getRule(index: String): Rule {
+        val rule: Rule
+        runBlocking {
+            setLoading(true)
+            rule = ruleDao.getRule(index)
+            setLoading(false)
+        }
+        return rule
+    }
+
     fun getRuleList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isRuleEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetRuleList(listOfCategory.value.rules, listOfRules, ruleDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetRuleList(listOfCategory.value.rules, listOfRules, ruleDao)
+            setLoading(false)
         }
     }
 
@@ -322,12 +484,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return ruleSectionDao.tableIsEmpty()
     }
 
+    fun getRuleSection(index: String): RuleSection {
+        val ruleSection: RuleSection
+        runBlocking {
+            setLoading(true)
+            ruleSection = ruleSectionDao.getRuleSection(index)
+            setLoading(false)
+        }
+        return ruleSection
+    }
+
     fun getRuleSectionList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isRuleSectionEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetRuleSectionList(listOfCategory.value.ruleSections, listOfRuleSections, ruleSectionDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetRuleSectionList(listOfCategory.value.ruleSections, listOfRuleSections, ruleSectionDao)
+            setLoading(false)
         }
     }
 
@@ -335,12 +507,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return skillDao.tableIsEmpty()
     }
 
+    fun getSkill(index: String): Skill {
+        val skill: Skill
+        runBlocking {
+            setLoading(true)
+            skill = skillDao.getSkill(index)
+            setLoading(false)
+        }
+        return skill
+    }
+
     fun getSkillList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isSkillEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetSkillList(listOfCategory.value.skills, listOfSkills, skillDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetSkillList(listOfCategory.value.skills, listOfSkills, skillDao)
+            setLoading(false)
         }
     }
 
@@ -348,11 +530,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return spellDao.tableIsEmpty()
     }
 
+    fun getSpell(index: String): Spell {
+        val spell: Spell
+        runBlocking {
+            setLoading(true)
+            spell = spellDao.getSpell(index)
+            setLoading(false)
+        }
+        return spell
+    }
+
     fun getSpellList() {
         viewModelScope.launch {
-                setLoading(true)
-                categoryDataService.checkAndSetSpellList(listOfCategory.value.spells, listOfSpells, spellDao)
-                setLoading(false)
+            Log.d("debug2", "ABILITY SCORE EMPTY: ${isSpellsEmpty()}")
+            setLoading(true)
+            categoryDataService.checkAndSetSpellList(listOfCategory.value.spells, listOfSpells, spellDao)
+            setLoading(false)
         }
     }
 
@@ -360,12 +553,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return subclassDao.tableIsEmpty()
     }
 
+    fun getSubclass(index: String): Subclass {
+        val subclass: Subclass
+        runBlocking {
+            setLoading(true)
+            subclass = subclassDao.getSubclass(index)
+            setLoading(false)
+        }
+        return subclass
+    }
+
     fun getSubclassList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isSubclassEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetSubclassList(listOfCategory.value.subclasses, listOfSubclasses, subclassDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetSubclassList(listOfCategory.value.subclasses, listOfSubclasses, subclassDao)
+            setLoading(false)
         }
     }
 
@@ -373,12 +576,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return subraceDao.tableIsEmpty()
     }
 
+    fun getSubrace(index: String): Subrace {
+        val subrace: Subrace
+        runBlocking {
+            setLoading(true)
+            subrace = subraceDao.getSubrace(index)
+            setLoading(false)
+        }
+        return subrace
+    }
+
     fun getSubraceList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isSubraceEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetSubraceList(listOfCategory.value.subraces, listOfSubraces, subraceDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetSubraceList(listOfCategory.value.subraces, listOfSubraces, subraceDao)
+            setLoading(false)
         }
     }
 
@@ -386,12 +599,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return traitDao.tableIsEmpty()
     }
 
+    fun getTrait(index: String): Trait {
+        val trait: Trait
+        runBlocking {
+            setLoading(true)
+            trait = traitDao.getTrait(index)
+            setLoading(false)
+        }
+        return trait
+    }
+
     fun getTraitList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isTraitEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetTraitList(listOfCategory.value.traits, listOfTraits, traitDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetTraitList(listOfCategory.value.traits, listOfTraits, traitDao)
+            setLoading(false)
         }
     }
 
@@ -399,12 +622,22 @@ class MainVM(application: Application): AndroidViewModel(application) {
         return weaponPropertyDao.tableIsEmpty()
     }
 
+    fun getWeaponProperty(index: String): WeaponProperty {
+        val weaponProperty: WeaponProperty
+        runBlocking {
+            setLoading(true)
+            weaponProperty = weaponPropertyDao.getWeaponProperty(index)
+            setLoading(false)
+        }
+        return weaponProperty
+    }
+
     fun getWeaponPropertyList() {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isWeaponPropertyEmpty()}")
-                setLoading(true)
-                categoryDataService.checkAndSetWeaponPropertyList(listOfCategory.value.weaponProperties, listOfWeaponProperties, weaponPropertyDao)
-                setLoading(false)
+            setLoading(true)
+            categoryDataService.checkAndSetWeaponPropertyList(listOfCategory.value.weaponProperties, listOfWeaponProperties, weaponPropertyDao)
+            setLoading(false)
         }
     }
 }

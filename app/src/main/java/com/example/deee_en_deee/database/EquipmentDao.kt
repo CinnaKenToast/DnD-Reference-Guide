@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.Equipment
 
 @Dao
@@ -13,6 +14,9 @@ interface EquipmentDao {
 
     @Delete
     suspend fun delete(equipment: Equipment)
+
+    @Query("SELECT * FROM equipment WHERE (:index == `index`)")
+    suspend fun getEquipment(index: String): Equipment
 
     @Query("SELECT * FROM equipment")
     suspend fun getListOfEquipments(): List<Equipment>?

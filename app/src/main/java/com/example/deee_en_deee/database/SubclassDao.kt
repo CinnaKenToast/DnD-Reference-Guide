@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.Subclass
 
 @Dao
@@ -13,6 +14,9 @@ interface SubclassDao {
 
     @Delete
     suspend fun delete(subclass: Subclass)
+
+    @Query("SELECT * FROM subclass WHERE (:index == `index`)")
+    suspend fun getSubclass(index: String): Subclass
 
     @Query("SELECT * FROM subclass")
     suspend fun getListOfSubclasses(): List<Subclass>?

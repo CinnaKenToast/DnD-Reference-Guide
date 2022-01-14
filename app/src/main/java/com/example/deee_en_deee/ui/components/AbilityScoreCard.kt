@@ -15,38 +15,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavController
 import com.example.deee_en_deee.infoTypes.*
 
 @Composable
-fun AbilityScoreCardList(abilityScoreList: List<AbilityScore>) {
+fun AbilityScoreCardList(abilityScoreList: List<AbilityScore>, navController: NavController) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(8.dp)
     ) {
         items(items = abilityScoreList) { abilityScore ->
-            AbilityScoreCard(abilityScore)
+            AbilityScoreCard(abilityScore, navController)
         }
     }
 }
 
 @Composable
-fun AbilityScoreCard(abilityScore: AbilityScore) {
-    var openDialog by remember { mutableStateOf(false) }
+fun AbilityScoreCard(abilityScore: AbilityScore, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .clickable { openDialog = true }
+            .clickable { navController.navigate("abilityScorePage/${abilityScore.index}") }
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
             AbilityScoreBaseCard(abilityScore = abilityScore)
         }
-    }
-
-    if (openDialog) {
-        AbilityScoreCardDialog(abilityScore = abilityScore, onDismissRequest = { openDialog = false })
     }
 }
 
@@ -105,6 +101,24 @@ fun AbilityScoreExtendedCard(abilityScore: AbilityScore) {
 }
 
 @Composable
+fun AbilityScorePage(abilityScore: AbilityScore) {
+    Box(
+        modifier = Modifier.fillMaxHeight()
+    ) {
+        LazyColumn(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            item{
+                AbilityScoreBaseCard(abilityScore = abilityScore)
+            }
+            item{
+                AbilityScoreExtendedCard(abilityScore = abilityScore)
+            }
+        }
+    }
+}
+
+@Composable
 fun AbilityScoreCardDialog(abilityScore: AbilityScore, onDismissRequest: () -> Unit){
     Dialog(
         onDismissRequest = { onDismissRequest() }
@@ -133,7 +147,7 @@ fun AbilityScorePreview() {
     val abilityScoreList = mutableListOf(
         abilityScore, abilityScore, abilityScore, abilityScore, abilityScore, abilityScore, abilityScore, abilityScore
     )
-    AbilityScoreCardList(abilityScoreList = abilityScoreList)
+//    AbilityScoreCardList(abilityScoreList = abilityScoreList)
 }
 
 val abilityScore = AbilityScore(

@@ -22,10 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.deee_en_deee.infoTypes.*
-import com.example.deee_en_deee.ui.components.AbilityScoreCardList
-import com.example.deee_en_deee.ui.components.AlignmentCardList
-import com.example.deee_en_deee.ui.components.ClassCardList
-import com.example.deee_en_deee.ui.components.SpellCardList
+import com.example.deee_en_deee.ui.components.*
 
 class MainActivity : ComponentActivity() {
     private lateinit var mainVM: MainVM
@@ -91,18 +88,29 @@ class MainActivity : ComponentActivity() {
             composable("startPage") { InitialButtons(navController = navController) }
             composable("abilityList") { AbilityList(navController = navController) }
             composable(
-                "abilityPage/{ability}",
+                "abilityScorePage/{abilityIndex}",
                 arguments = listOf(
-                    navArgument("ability") { type = NavType.StringType }
+                    navArgument("abilityIndex") { type = NavType.StringType }
                 )
             ) { navBackStackEntry ->
-                navBackStackEntry.arguments?.getString("ability")?.let { ability ->
-                /*
-                   AbilityPage(navController = navController, ability = ability.fromJsonString<AbilityScore>())
-               */
+                navBackStackEntry.arguments?.getString("abilityIndex")?.let { abilityIndex ->
+                    val abilityScore = mainVM.getAbilityScore(abilityIndex)
+                    AbilityScorePage(abilityScore = abilityScore)
                 }
             }
             composable("alignmentList") { AlignmentList(navController = navController) }
+            composable(
+                "alignmentPage/{alignmentIndex}",
+                arguments = listOf(
+                    navArgument("alignmentIndex") { type = NavType.StringType }
+                )
+            ) { navBackStackEntry ->
+            navBackStackEntry.arguments?.getString("alignmentIndex")?.let {alignmentIndex ->
+                val alignmentType = mainVM.getAlignmentType(alignmentIndex)
+                AlignmentPage(alignmentType = alignmentType)
+            }
+
+            }
             composable("classList") { ClassList(navController = navController) }
         }
     }
@@ -392,6 +400,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun AbilityList(navController: NavController) {
+        Log.d("debug", "STARTING ABILITY LIST")
         mainVM.getAbilityScoreList()
 
         val isLoading by mainVM.isLoading
@@ -410,7 +419,7 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
-                AbilityScoreCardList(abilityScoreList = mainVM.listOfAbilityScores.value)
+                AbilityScoreCardList(abilityScoreList = mainVM.listOfAbilityScores.value, navController = navController)
             }
         }
 
@@ -436,9 +445,9 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
-                AlignmentCardList(alignmentList = mainVM.listOfAlignments.value)
+                AlignmentCardList(alignmentList = mainVM.listOfAlignments.value, navController = navController)
             }
-            }
+        }
     }
 
     @Composable

@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.Condition
 
 @Dao
@@ -13,6 +14,9 @@ interface ConditionDao {
 
     @Delete
     suspend fun delete(condition: Condition)
+
+    @Query("SELECT * FROM condition WHERE (:index == `index`)")
+    suspend fun getCondition(index: String): Condition
 
     @Query("SELECT * FROM condition")
     suspend fun getListOfConditions(): List<Condition>?

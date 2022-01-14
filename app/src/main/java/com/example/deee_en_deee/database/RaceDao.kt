@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.Race
 
 @Dao
@@ -13,6 +14,9 @@ interface RaceDao {
 
     @Delete
     suspend fun delete(race: Race)
+
+    @Query("SELECT * FROM race WHERE (:index == `index`)")
+    suspend fun getRace(index: String): Race
 
     @Query("SELECT * FROM race")
     suspend fun getListOfRaces(): List<Race>?

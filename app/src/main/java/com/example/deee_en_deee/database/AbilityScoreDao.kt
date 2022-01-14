@@ -14,6 +14,9 @@ interface AbilityScoreDao {
     @Delete
     suspend fun delete(abilityScore: AbilityScore)
 
+    @Query("SELECT * FROM abilityScore WHERE (:index == `index`)")
+    suspend fun getAbilityScore(index: String): AbilityScore
+
     @Query("SELECT * FROM abilityScore")
     suspend fun getListOfAbilityScores(): List<AbilityScore>?
 

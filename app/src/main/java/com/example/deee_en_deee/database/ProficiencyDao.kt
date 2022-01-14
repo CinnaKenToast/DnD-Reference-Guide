@@ -1,6 +1,7 @@
 package com.example.deee_en_deee.database
 
 import androidx.room.*
+import com.example.deee_en_deee.infoTypes.AlignmentType
 import com.example.deee_en_deee.infoTypes.Proficiency
 
 @Dao
@@ -13,6 +14,9 @@ interface ProficiencyDao {
 
     @Delete
     suspend fun delete(proficiency: Proficiency)
+
+    @Query("SELECT * FROM proficiency WHERE (:index == `index`)")
+    suspend fun getProficiency(index: String): Proficiency
 
     @Query("SELECT * FROM proficiency")
     suspend fun getListOfProficiencies(): List<Proficiency>?
