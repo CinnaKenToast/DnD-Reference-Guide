@@ -9,14 +9,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.deee_en_deee.database.*
 import com.example.deee_en_deee.infoTypes.*
-import com.example.deee_en_deee.services.CategoryDataService
+import com.example.deee_en_deee.services.CategoryDataServiceRepository
+import com.example.deee_en_deee.useCase.CategoryFetcherUseCase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
 class MainVM(application: Application): AndroidViewModel(application) {
     private val context = getApplication<Application>().applicationContext
-    private val categoryDataService = CategoryDataService()
+    private val categoryDataService = CategoryDataServiceRepository()
+    private val categoryFetcherUseCase = CategoryFetcherUseCase()
     val isLoading = mutableStateOf(true)
 
     val abilityScoreDao = AbilityScoreDatabase.getInstance(context).abilityScoreDao()
@@ -74,36 +76,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
 
     init {
         viewModelScope.launch {
-            listOfCategory.value = categoryDataService.getCategories().getOrThrow()
-//            categoryDataService.getCategories().onSuccess { it ->
-//                setLoading(true)
-//
-//                categoryDataService.checkAndSetAbilityScoreList(it.abilityScore, listOfAbilityScores, abilityScoreDao)
-//                categoryDataService.checkAndSetAlignmentList(it.alignments, listOfAlignments, alignmentDao)
-//                categoryDataService.checkAndSetClassList(it.classes, listOfClasses, classDao)
-//                categoryDataService.checkAndSetConditionList(it.conditions, listOfConditions, conditionDao)
-//                categoryDataService.checkAndSetDamageTypeList(it.damageTypes, listOfDamageTypes, damageTypeDao)
-//                categoryDataService.checkAndSetEquipmentCategoryList(it.equipmentCategory, listOfEquipmentCategories, equipmentCategoryDao)
-//                categoryDataService.checkAndSetEquipmentList(it.equipment, listOfEquipments, equipmentDao)
-//                categoryDataService.checkAndSetFeatList(it.feats, listOfFeats, featDao)
-//                categoryDataService.checkAndSetFeatureList(it.features, listOfFeatures, featureDao)
-//                categoryDataService.checkAndSetLanguageList(it.languages, listOfLanguages, languageDao)
-//                categoryDataService.checkAndSetMagicItemList(it.magicItems, listOfMagicItems, magicItemDao)
-//                categoryDataService.checkAndSetMagicSchoolList(it.magicSchools, listOfMagicSchools, magicSchoolDao)
-//                categoryDataService.checkAndSetMonsterList(it.monsters, listOfMonsters, monsterDao)
-//                categoryDataService.checkAndSetProficiencyList(it.proficiencies, listOfProficiencies, proficiencyDao)
-//                categoryDataService.checkAndSetRaceList(it.races, listOfRaces, raceDao)
-//                categoryDataService.checkAndSetRuleList(it.rules, listOfRules, ruleDao)
-//                categoryDataService.checkAndSetRuleSectionList(it.ruleSections, listOfRuleSections, ruleSectionDao)
-//                categoryDataService.checkAndSetSkillList(it.skills, listOfSkills, skillDao)
-//                categoryDataService.checkAndSetSpellList(it.spells, listOfSpells, spellDao)
-//                categoryDataService.checkAndSetSubclassList(it.subclasses, listOfSubclasses, subclassDao)
-//                categoryDataService.checkAndSetSubraceList(it.subraces, listOfSubraces, subraceDao)
-//                categoryDataService.checkAndSetTraitList(it.traits, listOfTraits, traitDao)
-//                categoryDataService.checkAndSetWeaponPropertyList(it.weaponProperties, listOfWeaponProperties, weaponPropertyDao)
-//
-//                setLoading(false)
-//            }
+            categoryFetcherUseCase.getCategoryList(listOfCategory)
         }
     }
 
@@ -129,7 +102,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isAbilityScoreEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetAbilityScoreList(listOfCategory.value.abilityScore, listOfAbilityScores, abilityScoreDao)
+            categoryFetcherUseCase.getAbilityScoreList(listOfCategory.value.abilityScore, listOfAbilityScores, abilityScoreDao)
             setLoading(false)
         }
     }
@@ -152,7 +125,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isAlignmentEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetAlignmentList(listOfCategory.value.alignments, listOfAlignments, alignmentDao)
+            categoryFetcherUseCase.getAlignmentList(listOfCategory.value.alignments, listOfAlignments, alignmentDao)
             setLoading(false)
         }
     }
@@ -175,7 +148,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isClassEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetClassList(listOfCategory.value.classes, listOfClasses, classDao)
+            categoryFetcherUseCase.getClassList(listOfCategory.value.classes, listOfClasses, classDao)
             setLoading(false)
         }
     }
@@ -198,7 +171,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isConditionEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetConditionList(listOfCategory.value.conditions, listOfConditions, conditionDao)
+            categoryFetcherUseCase.getConditionsList(listOfCategory.value.conditions, listOfConditions, conditionDao)
             setLoading(false)
         }
     }
@@ -221,7 +194,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isDamageTypeEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetDamageTypeList(listOfCategory.value.damageTypes, listOfDamageTypes, damageTypeDao)
+            categoryFetcherUseCase.getDamageTypeList(listOfCategory.value.damageTypes, listOfDamageTypes, damageTypeDao)
             setLoading(false)
         }
     }
@@ -244,7 +217,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isEquipmentCategoryEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetEquipmentCategoryList(listOfCategory.value.equipmentCategory, listOfEquipmentCategories, equipmentCategoryDao)
+            categoryFetcherUseCase.getEquipmentCategoryList(listOfCategory.value.equipmentCategory, listOfEquipmentCategories, equipmentCategoryDao)
             setLoading(false)
         }
     }
@@ -267,7 +240,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isEquipmentEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetEquipmentList(listOfCategory.value.equipment, listOfEquipments, equipmentDao)
+            categoryFetcherUseCase.getEquipmentList(listOfCategory.value.equipment, listOfEquipments, equipmentDao)
             setLoading(false)
         }
     }
@@ -291,7 +264,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isFeatEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetFeatList(listOfCategory.value.feats, listOfFeats, featDao)
+            categoryFetcherUseCase.getFeatList(listOfCategory.value.feats, listOfFeats, featDao)
             setLoading(false)
         }
     }
@@ -314,7 +287,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isFeatureEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetFeatureList(listOfCategory.value.features, listOfFeatures, featureDao)
+            categoryFetcherUseCase.getFeatureList(listOfCategory.value.features, listOfFeatures, featureDao)
             setLoading(false)
         }
     }
@@ -337,7 +310,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isLanguageEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetLanguageList(listOfCategory.value.languages, listOfLanguages, languageDao)
+            categoryFetcherUseCase.getLanguageList(listOfCategory.value.languages, listOfLanguages, languageDao)
             setLoading(false)
         }
     }
@@ -360,7 +333,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isMagicItemEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetMagicItemList(listOfCategory.value.magicItems, listOfMagicItems, magicItemDao)
+            categoryFetcherUseCase.getMagicItemList(listOfCategory.value.magicItems, listOfMagicItems, magicItemDao)
             setLoading(false)
         }
     }
@@ -383,7 +356,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isMagicSchoolEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetMagicSchoolList(listOfCategory.value.magicSchools, listOfMagicSchools, magicSchoolDao)
+            categoryFetcherUseCase.getMagicSchoolList(listOfCategory.value.magicSchools, listOfMagicSchools, magicSchoolDao)
             setLoading(false)
         }
     }
@@ -406,7 +379,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isMonsterEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetMonsterList(listOfCategory.value.monsters, listOfMonsters, monsterDao)
+            categoryFetcherUseCase.getMonsterList(listOfCategory.value.monsters, listOfMonsters, monsterDao)
             setLoading(false)
         }
     }
@@ -429,7 +402,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isProficiencyEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetProficiencyList(listOfCategory.value.abilityScore, listOfProficiencies, proficiencyDao)
+            categoryFetcherUseCase.getProficiencyList(listOfCategory.value.abilityScore, listOfProficiencies, proficiencyDao)
             setLoading(false)
         }
     }
@@ -452,7 +425,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isRaceEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetRaceList(listOfCategory.value.races, listOfRaces, raceDao)
+            categoryFetcherUseCase.getRaceList(listOfCategory.value.races, listOfRaces, raceDao)
             setLoading(false)
         }
     }
@@ -475,7 +448,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isRuleEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetRuleList(listOfCategory.value.rules, listOfRules, ruleDao)
+            categoryFetcherUseCase.getRuleList(listOfCategory.value.rules, listOfRules, ruleDao)
             setLoading(false)
         }
     }
@@ -498,7 +471,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isRuleSectionEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetRuleSectionList(listOfCategory.value.ruleSections, listOfRuleSections, ruleSectionDao)
+            categoryFetcherUseCase.getRuleSectionList(listOfCategory.value.ruleSections, listOfRuleSections, ruleSectionDao)
             setLoading(false)
         }
     }
@@ -521,7 +494,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isSkillEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetSkillList(listOfCategory.value.skills, listOfSkills, skillDao)
+            categoryFetcherUseCase.getSkillList(listOfCategory.value.skills, listOfSkills, skillDao)
             setLoading(false)
         }
     }
@@ -544,7 +517,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isSpellsEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetSpellList(listOfCategory.value.spells, listOfSpells, spellDao)
+            categoryFetcherUseCase.getSpellList(listOfCategory.value.spells, listOfSpells, spellDao)
             setLoading(false)
         }
     }
@@ -567,7 +540,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isSubclassEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetSubclassList(listOfCategory.value.subclasses, listOfSubclasses, subclassDao)
+            categoryFetcherUseCase.getSubclassList(listOfCategory.value.subclasses, listOfSubclasses, subclassDao)
             setLoading(false)
         }
     }
@@ -590,7 +563,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isSubraceEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetSubraceList(listOfCategory.value.subraces, listOfSubraces, subraceDao)
+            categoryFetcherUseCase.getSubraceList(listOfCategory.value.subraces, listOfSubraces, subraceDao)
             setLoading(false)
         }
     }
@@ -613,7 +586,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isTraitEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetTraitList(listOfCategory.value.traits, listOfTraits, traitDao)
+            categoryFetcherUseCase.getTraitList(listOfCategory.value.traits, listOfTraits, traitDao)
             setLoading(false)
         }
     }
@@ -636,7 +609,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
         viewModelScope.launch {
             Log.d("debug2", "ABILITY SCORE EMPTY: ${isWeaponPropertyEmpty()}")
             setLoading(true)
-            categoryDataService.checkAndSetWeaponPropertyList(listOfCategory.value.weaponProperties, listOfWeaponProperties, weaponPropertyDao)
+            categoryFetcherUseCase.getWeaponProperty(listOfCategory.value.weaponProperties, listOfWeaponProperties, weaponPropertyDao)
             setLoading(false)
         }
     }
