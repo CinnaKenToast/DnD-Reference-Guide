@@ -15,35 +15,33 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
-class MainVM(application: Application): AndroidViewModel(application) {
-    private val context = getApplication<Application>().applicationContext
-    private val categoryDataService = CategoryDataServiceRepository()
+class MainViewModel(application: Application): AndroidViewModel(application) {
     private val categoryFetcherUseCase = CategoryFetcherUseCase()
     val isLoading = mutableStateOf(true)
 
-    val abilityScoreDao = AbilityScoreDatabase.getInstance(context).abilityScoreDao()
-    val alignmentDao = AlignmentDatabase.getInstance(context).alignmentDao()
-    val classDao = ClassDatabase.getInstance(context).classDao()
-    val conditionDao = ConditionDatabase.getInstance(context).conditionDao()
-    val damageTypeDao = DamageTypeDatabase.getInstance(context).damageTypeDao()
-    val equipmentCategoryDao = EquipmentCategoryDatabase.getInstance(context).equipmentCategoryDao()
-    val equipmentDao = EquipmentDatabase.getInstance(context).equipmentDao()
-    val featDao = FeatDatabase.getInstance(context).featDao()
-    val featureDao = FeatureDatabase.getInstance(context).featureDao()
-    val languageDao = LanguageDatabase.getInstance(context).languageDao()
-    val magicItemDao = MagicItemDatabase.getInstance(context).magicItemDao()
-    val magicSchoolDao = MagicSchoolDatabase.getInstance(context).magicSchoolDao()
-    val monsterDao = MonsterDatabase.getInstance(context).monsterDao()
-    val proficiencyDao = ProficiencyDatabase.getInstance(context).proficiencyDao()
-    val raceDao = RaceDatabase.getInstance(context).raceDao()
-    val ruleDao = RuleDatabase.getInstance(context).ruleDao()
-    val ruleSectionDao = RuleSectionDatabase.getInstance(context).ruleSectionDao()
-    val skillDao = SkillDatabase.getInstance(context).skillDao()
-    val spellDao = SpellDatabase.getInstance(context).spellDao()
-    val subclassDao = SubclassDatabase.getInstance(context).subclassDao()
-    val subraceDao = SubraceDatabase.getInstance(context).subraceDao()
-    val traitDao = TraitDatabase.getInstance(context).traitDao()
-    val weaponPropertyDao = WeaponPropertyDatabase.getInstance(context).weaponPropertyDao()
+    val abilityScoreDao = AbilityScoreDatabase.getInstance(application.applicationContext).abilityScoreDao()
+    val alignmentDao = AlignmentDatabase.getInstance(application.applicationContext).alignmentDao()
+    val classDao = ClassDatabase.getInstance(application.applicationContext).classDao()
+    val conditionDao = ConditionDatabase.getInstance(application.applicationContext).conditionDao()
+    val damageTypeDao = DamageTypeDatabase.getInstance(application.applicationContext).damageTypeDao()
+    val equipmentCategoryDao = EquipmentCategoryDatabase.getInstance(application.applicationContext).equipmentCategoryDao()
+    val equipmentDao = EquipmentDatabase.getInstance(application.applicationContext).equipmentDao()
+    val featDao = FeatDatabase.getInstance(application.applicationContext).featDao()
+    val featureDao = FeatureDatabase.getInstance(application.applicationContext).featureDao()
+    val languageDao = LanguageDatabase.getInstance(application.applicationContext).languageDao()
+    val magicItemDao = MagicItemDatabase.getInstance(application.applicationContext).magicItemDao()
+    val magicSchoolDao = MagicSchoolDatabase.getInstance(application.applicationContext).magicSchoolDao()
+    val monsterDao = MonsterDatabase.getInstance(application.applicationContext).monsterDao()
+    val proficiencyDao = ProficiencyDatabase.getInstance(application.applicationContext).proficiencyDao()
+    val raceDao = RaceDatabase.getInstance(application.applicationContext).raceDao()
+    val ruleDao = RuleDatabase.getInstance(application.applicationContext).ruleDao()
+    val ruleSectionDao = RuleSectionDatabase.getInstance(application.applicationContext).ruleSectionDao()
+    val skillDao = SkillDatabase.getInstance(application.applicationContext).skillDao()
+    val spellDao = SpellDatabase.getInstance(application.applicationContext).spellDao()
+    val subclassDao = SubclassDatabase.getInstance(application.applicationContext).subclassDao()
+    val subraceDao = SubraceDatabase.getInstance(application.applicationContext).subraceDao()
+    val traitDao = TraitDatabase.getInstance(application.applicationContext).traitDao()
+    val weaponPropertyDao = WeaponPropertyDatabase.getInstance(application.applicationContext).weaponPropertyDao()
 
     val listOfCategory = mutableStateOf(InitialReferences())
 
@@ -615,7 +613,7 @@ class MainVM(application: Application): AndroidViewModel(application) {
     }
 }
 
-class MainVMFactory(val application: Application): ViewModelProvider.Factory {
+class MainViewModelFactory(val application: Application): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return modelClass.getConstructor(Application::class.java).newInstance(application)
     }

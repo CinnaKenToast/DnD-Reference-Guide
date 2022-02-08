@@ -26,7 +26,7 @@ import androidx.navigation.navArgument
 import com.example.deee_en_deee.ui.components.*
 
 class MainActivity : ComponentActivity() {
-    private lateinit var mainVM: MainVM
+    private lateinit var mainViewModel: MainViewModel
 
 //    private val abilityScoreList by mainVM.listOfAbilityScores
 //    private val alignmentList by mainVM.listOfAlignments
@@ -55,8 +55,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val vmFactory = MainVMFactory(application = application)
-        mainVM = ViewModelProvider(this, vmFactory).get(MainVM::class.java)
+        val vmFactory = MainViewModelFactory(application = application)
+        mainViewModel = ViewModelProvider(this, vmFactory).get(MainViewModel::class.java)
 
 
         setContent {
@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
                 )
             ) { navBackStackEntry ->
                 navBackStackEntry.arguments?.getString("abilityIndex")?.let { abilityIndex ->
-                    val abilityScore = mainVM.getAbilityScore(abilityIndex)
+                    val abilityScore = mainViewModel.getAbilityScore(abilityIndex)
                     AbilityScorePage(abilityScore = abilityScore)
                 }
             }
@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
                 )
             ) { navBackStackEntry ->
                 navBackStackEntry.arguments?.getString("alignmentIndex")?.let {alignmentIndex ->
-                    val alignmentType = mainVM.getAlignmentType(alignmentIndex)
+                    val alignmentType = mainViewModel.getAlignmentType(alignmentIndex)
                     AlignmentPage(alignmentType = alignmentType)
                 }
             }
@@ -119,7 +119,7 @@ class MainActivity : ComponentActivity() {
                 )
             ) { navBackStackEntry ->
                 navBackStackEntry.arguments?.getString("classIndex")?.let {classIndex ->
-                    val classType = mainVM.getClassType(classIndex)
+                    val classType = mainViewModel.getClassType(classIndex)
                     ClassPage(classType = classType)
                 }
             }
@@ -132,7 +132,7 @@ class MainActivity : ComponentActivity() {
                 )
             ) { navBackStackEntry ->
                 navBackStackEntry.arguments?.getString("spellIndex")?.let {spellIndex ->
-                    val spell = mainVM.getSpell(spellIndex)
+                    val spell = mainViewModel.getSpell(spellIndex)
                     SpellPage(spell = spell)
                 }
             }
@@ -174,105 +174,105 @@ class MainActivity : ComponentActivity() {
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getConditionList() }
+                        onClick = { mainViewModel.getConditionList() }
                     ){
                         Text("Conditions")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getDamageTypeList() }
+                        onClick = { mainViewModel.getDamageTypeList() }
                     ){
                         Text("Damage Types")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getEquipmentCategoryList() }
+                        onClick = { mainViewModel.getEquipmentCategoryList() }
                     ){
                         Text("Equipment Categories")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getEquipmentList() }
+                        onClick = { mainViewModel.getEquipmentList() }
                     ){
                         Text("Equipment")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getFeatList() }
+                        onClick = { mainViewModel.getFeatList() }
                     ){
                         Text("Feats")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getFeatureList() }
+                        onClick = { mainViewModel.getFeatureList() }
                     ){
                         Text("Features")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getLanguageList() }
+                        onClick = { mainViewModel.getLanguageList() }
                     ){
                         Text("Languages")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getMagicItemList() }
+                        onClick = { mainViewModel.getMagicItemList() }
                     ){
                         Text("Magic Items")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getMagicSchoolList() }
+                        onClick = { mainViewModel.getMagicSchoolList() }
                     ){
                         Text("Magic Schools")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getMonsterList() }
+                        onClick = { mainViewModel.getMonsterList() }
                     ){
                         Text("Monsters")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getProficiencyList() }
+                        onClick = { mainViewModel.getProficiencyList() }
                     ){
                         Text("Proficiencies")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getRaceList() }
+                        onClick = { mainViewModel.getRaceList() }
                     ){
                         Text("Races")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getRuleList() }
+                        onClick = { mainViewModel.getRuleList() }
                     ){
                         Text("Rules")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getRuleSectionList() }
+                        onClick = { mainViewModel.getRuleSectionList() }
                     ){
                         Text("Rule Sections")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getSkillList() }
+                        onClick = { mainViewModel.getSkillList() }
                     ){
                         Text("Skills")
                     }
@@ -286,28 +286,28 @@ class MainActivity : ComponentActivity() {
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getSubclassList() }
+                        onClick = { mainViewModel.getSubclassList() }
                     ){
                         Text("Subclasses")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getSubraceList() }
+                        onClick = { mainViewModel.getSubraceList() }
                     ){
                         Text("Subraces")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getTraitList() }
+                        onClick = { mainViewModel.getTraitList() }
                     ){
                         Text("Traits")
                     }
                 }
                 item {
                     Button(
-                        onClick = { mainVM.getWeaponPropertyList() }
+                        onClick = { mainViewModel.getWeaponPropertyList() }
                     ){
                         Text("Weapon Properties")
                     }
@@ -320,10 +320,10 @@ class MainActivity : ComponentActivity() {
     private fun AbilityListScreen(navController: NavController) {
         Log.d("debug", "STARTING ABILITY LIST")
         LaunchedEffect(Unit) {
-            mainVM.getAbilityScoreList()
+            mainViewModel.getAbilityScoreList()
         }
 
-        val isLoading by mainVM.isLoading
+        val isLoading by mainViewModel.isLoading
         Log.d("debug", "LOADING: $isLoading")
         Surface(
             color = Color.LightGray,
@@ -346,7 +346,7 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
-                AbilityScoreCardList(abilityScoreList = mainVM.listOfAbilityScores.value, navController = navController)
+                AbilityScoreCardList(abilityScoreList = mainViewModel.listOfAbilityScores.value, navController = navController)
             }
         }
     }
@@ -354,10 +354,10 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun AlignmentListScreen(navController: NavController) {
         LaunchedEffect(Unit) {
-            mainVM.getAlignmentList()
+            mainViewModel.getAlignmentList()
         }
 
-        val isLoading by mainVM.isLoading
+        val isLoading by mainViewModel.isLoading
         Log.d("debug", "LOADING: $isLoading")
         Surface(
             color = Color.LightGray,
@@ -380,7 +380,7 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
-                AlignmentCardList(alignmentList = mainVM.listOfAlignments.value, navController = navController)
+                AlignmentCardList(alignmentList = mainViewModel.listOfAlignments.value, navController = navController)
             }
         }
     }
@@ -388,10 +388,10 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun ClassListScreen(navController: NavController) {
         LaunchedEffect(Unit) {
-            mainVM.getClassList()
+            mainViewModel.getClassList()
         }
 
-        val isLoading by mainVM.isLoading
+        val isLoading by mainViewModel.isLoading
         Log.d("debug", "LOADING: $isLoading")
         Surface(
             color = Color.LightGray,
@@ -414,7 +414,7 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
-                ClassCardList(classList = mainVM.listOfClasses.value, navController)
+                ClassCardList(classList = mainViewModel.listOfClasses.value, navController)
             }
         }
     }
@@ -422,10 +422,10 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun SpellListScreen(navController: NavController) {
         LaunchedEffect(Unit) {
-            mainVM.getSpellList()
+            mainViewModel.getSpellList()
         }
 
-        val isLoading by mainVM.isLoading
+        val isLoading by mainViewModel.isLoading
         Log.d("debug", "LOADING: $isLoading")
         Surface(
             color = Color.LightGray,
@@ -448,7 +448,7 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
-                SpellCardList(spellList = mainVM.listOfSpells.value, navController)
+                SpellCardList(spellList = mainViewModel.listOfSpells.value, navController)
             }
         }
     }
