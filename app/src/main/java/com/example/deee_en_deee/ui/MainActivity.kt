@@ -27,6 +27,7 @@ import com.example.deee_en_deee.ui.components.*
 
 class MainActivity : ComponentActivity() {
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var abilityScoreViewModel: AbilityScoreViewModel
 
 //    private val abilityScoreList by mainVM.listOfAbilityScores
 //    private val alignmentList by mainVM.listOfAlignments
@@ -57,6 +58,7 @@ class MainActivity : ComponentActivity() {
 
         val vmFactory = MainViewModelFactory(application = application)
         mainViewModel = ViewModelProvider(this, vmFactory).get(MainViewModel::class.java)
+        abilityScoreViewModel = ViewModelProvider(this, vmFactory).get(AbilityScoreViewModel::class.java)
 
 
         setContent {
@@ -95,7 +97,7 @@ class MainActivity : ComponentActivity() {
                 )
             ) { navBackStackEntry ->
                 navBackStackEntry.arguments?.getString("abilityIndex")?.let { abilityIndex ->
-                    val abilityScore = mainViewModel.getAbilityScore(abilityIndex)
+                    val abilityScore = abilityScoreViewModel.getAbilityScore(abilityIndex)
                     AbilityScorePage(abilityScore = abilityScore)
                 }
             }
@@ -320,10 +322,10 @@ class MainActivity : ComponentActivity() {
     private fun AbilityListScreen(navController: NavController) {
         Log.d("debug", "STARTING ABILITY LIST")
         LaunchedEffect(Unit) {
-            mainViewModel.getAbilityScoreList()
+            abilityScoreViewModel.getAbilityScoreList()
         }
 
-        val isLoading by mainViewModel.isLoading
+        val isLoading by abilityScoreViewModel.isLoading
         Log.d("debug", "LOADING: $isLoading")
         Surface(
             color = Color.LightGray,
@@ -346,7 +348,7 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
-                AbilityScoreCardList(abilityScoreList = mainViewModel.listOfAbilityScores.value, navController = navController)
+                AbilityScoreCardList(abilityScoreList = abilityScoreViewModel.listOfAbilityScores.value, navController = navController)
             }
         }
     }

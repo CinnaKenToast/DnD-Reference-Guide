@@ -19,7 +19,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     private val categoryFetcherUseCase = CategoryFetcherUseCase()
     val isLoading = mutableStateOf(true)
 
-    val abilityScoreDao = AbilityScoreDatabase.getInstance(application.applicationContext).abilityScoreDao()
     val alignmentDao = AlignmentDatabase.getInstance(application.applicationContext).alignmentDao()
     val classDao = ClassDatabase.getInstance(application.applicationContext).classDao()
     val conditionDao = ConditionDatabase.getInstance(application.applicationContext).conditionDao()
@@ -45,7 +44,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     val listOfCategory = mutableStateOf(InitialReferences())
 
-    val listOfAbilityScores = mutableStateOf(listOf<AbilityScore>())
     val listOfAlignments = mutableStateOf(listOf<AlignmentType>())
     val listOfClasses = mutableStateOf(listOf<ClassType>())
     val listOfConditions = mutableStateOf(listOf<Condition>())
@@ -80,29 +78,6 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     private fun setLoading(isLoading: Boolean) {
         this.isLoading.value = isLoading
-    }
-
-    private suspend fun isAbilityScoreEmpty(): Boolean {
-        return abilityScoreDao.tableIsEmpty()
-    }
-
-    fun getAbilityScore(index: String): AbilityScore {
-        val abilityScore: AbilityScore
-        runBlocking {
-            setLoading(true)
-            abilityScore = abilityScoreDao.getAbilityScore(index)
-            setLoading(false)
-        }
-        return abilityScore
-    }
-
-    fun getAbilityScoreList() {
-        viewModelScope.launch {
-            Log.d("debug2", "ABILITY SCORE EMPTY: ${isAbilityScoreEmpty()}")
-            setLoading(true)
-            categoryFetcherUseCase.getAbilityScoreList(listOfCategory.value.abilityScore, listOfAbilityScores, abilityScoreDao)
-            setLoading(false)
-        }
     }
 
     private suspend fun isAlignmentEmpty(): Boolean {
