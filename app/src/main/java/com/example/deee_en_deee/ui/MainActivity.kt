@@ -10,7 +10,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +21,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.ui.components.*
 
 class MainActivity : ComponentActivity() {
@@ -121,6 +119,19 @@ class MainActivity : ComponentActivity() {
                 navBackStackEntry.arguments?.getString("classIndex")?.let {classIndex ->
                     val classType = mainVM.getClassType(classIndex)
                     ClassPage(classType = classType)
+                }
+            }
+
+            composable("spellList") { SpellListScreen(navController = navController) }
+            composable(
+                "spellPage/{spellIndex}",
+                arguments = listOf(
+                    navArgument("spellIndex") { type = NavType.StringType }
+                )
+            ) { navBackStackEntry ->
+                navBackStackEntry.arguments?.getString("spellIndex")?.let {spellIndex ->
+                    val spell = mainVM.getSpell(spellIndex)
+                    SpellPage(spell = spell)
                 }
             }
         }
@@ -266,7 +277,7 @@ class MainActivity : ComponentActivity() {
                 }
                 item {
                     Button(
-                        onClick = { showSpellCardList() }
+                        onClick = { navController.navigate("spellList") }
                     ){
                         Text("Spells")
                     }
@@ -361,7 +372,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun ClassListScreen(navController: NavController) {
         LaunchedEffect(Unit) {
-            mainVM.getAbilityScoreList()
+            mainVM.getClassList()
         }
 
         val isLoading by mainVM.isLoading
@@ -385,28 +396,29 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @Composable
+    private fun SpellListScreen(navController: NavController) {
+        LaunchedEffect(Unit) {
+            mainVM.getSpellList()
+        }
 
-    private fun showSpellCardList() {
-        mainVM.getSpellList()
-        setContent {
-            val isLoading by mainVM.isLoading
-            Log.d("debug", "LOADING: $isLoading")
-            Surface(
-                color = Color.LightGray,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                if (isLoading) {
-                    Column(
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Log.d("debug", "LOADING")
-                        CircularProgressIndicator()
-                    }
-                } else {
-                    Log.d("debug", "SHOWING CARDS")
-                    SpellCardList(spellList = mainVM.listOfSpells.value)
+        val isLoading by mainVM.isLoading
+        Log.d("debug", "LOADING: $isLoading")
+        Surface(
+            color = Color.LightGray,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if (isLoading) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Log.d("debug", "LOADING")
+                    CircularProgressIndicator()
                 }
+            } else {
+                Log.d("debug", "SHOWING CARDS")
+                SpellCardList(spellList = mainVM.listOfSpells.value, navController)
             }
         }
     }

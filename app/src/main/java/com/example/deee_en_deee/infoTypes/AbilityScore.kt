@@ -1,10 +1,7 @@
 package com.example.deee_en_deee.infoTypes
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
-import com.example.deee_en_deee.utils.fromJsonString
-import com.example.deee_en_deee.utils.toJsonString
-import io.ktor.client.call.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

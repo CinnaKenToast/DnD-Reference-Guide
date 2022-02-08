@@ -17,40 +17,36 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.navigation.NavController
 import com.example.deee_en_deee.infoTypes.*
 import java.util.*
 
 @Composable
-fun SpellCardList(spellList: List<Spell>) {
+fun SpellCardList(spellList: List<Spell>, navController: NavController) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(8.dp)
     ) {
         items(items = spellList) { spell ->
-            SpellCard(spell)
+            SpellCard(spell, navController = navController)
         }
 
     }
 }
 
 @Composable
-fun SpellCard(spell: Spell) {
-    var openDialog by remember { mutableStateOf(false) }
+fun SpellCard(spell: Spell, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .clickable { openDialog = true }
+            .clickable { navController.navigate("spellPage/${spell.index}") }
     ) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
             SpellBaseCard(spell = spell)
         }
-    }
-
-    if (openDialog) {
-        SpellCardDialog(spell = spell, onDismissRequest = { openDialog = false })
     }
 }
 
@@ -275,6 +271,24 @@ fun SpellExtendedCard(spell: Spell) {
 }
 
 @Composable
+fun SpellPage(spell: Spell){
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        LazyColumn(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            item{
+                SpellBaseCard(spell = spell)
+            }
+            item{
+                SpellExtendedCard(spell = spell)
+            }
+        }
+    }
+}
+
+@Composable
 fun SpellCardDialog(spell: Spell, onDismissRequest: () -> Unit){
     Dialog(
         onDismissRequest = { onDismissRequest() }
@@ -306,7 +320,7 @@ fun SpellCardPreview() {
     val spellList = mutableListOf(
         acidArrow, acidArrow, acidArrow, acidArrow, acidArrow, acidArrow, acidArrow, acidArrow
     )
-    SpellCardList(spellList = spellList)
+//    SpellCardList(spellList = spellList)
 }
 
 val acidArrow = Spell(

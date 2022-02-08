@@ -1,6 +1,5 @@
 package com.example.deee_en_deee.ui.components
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,14 +9,15 @@ import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
-import com.example.deee_en_deee.infoTypes.*
+import com.example.deee_en_deee.infoTypes.APIReference
+import com.example.deee_en_deee.infoTypes.AbilityScore
 
 @Composable
 fun AbilityScoreCardList(abilityScoreList: List<AbilityScore>, navController: NavController) {
@@ -109,10 +109,10 @@ fun AbilityScorePage(abilityScore: AbilityScore) {
         LazyColumn(
             modifier = Modifier.padding(8.dp)
         ) {
-            item{
+            item {
                 AbilityScoreBaseCard(abilityScore = abilityScore)
             }
-            item{
+            item {
                 AbilityScoreExtendedCard(abilityScore = abilityScore)
             }
         }
@@ -120,7 +120,7 @@ fun AbilityScorePage(abilityScore: AbilityScore) {
 }
 
 @Composable
-fun AbilityScoreCardDialog(abilityScore: AbilityScore, onDismissRequest: () -> Unit){
+fun AbilityScoreCardDialog(abilityScore: AbilityScore, onDismissRequest: () -> Unit) {
     Dialog(
         onDismissRequest = { onDismissRequest() }
     ) {
@@ -131,10 +131,10 @@ fun AbilityScoreCardDialog(abilityScore: AbilityScore, onDismissRequest: () -> U
             LazyColumn(
                 modifier = Modifier.padding(8.dp)
             ) {
-                item{
+                item {
                     AbilityScoreBaseCard(abilityScore = abilityScore)
                 }
-                item{
+                item {
                     AbilityScoreExtendedCard(abilityScore = abilityScore)
                 }
             }
@@ -146,7 +146,14 @@ fun AbilityScoreCardDialog(abilityScore: AbilityScore, onDismissRequest: () -> U
 @Composable
 fun AbilityScorePreview() {
     val abilityScoreList = mutableListOf(
-        abilityScore, abilityScore, abilityScore, abilityScore, abilityScore, abilityScore, abilityScore, abilityScore
+        abilityScore,
+        abilityScore,
+        abilityScore,
+        abilityScore,
+        abilityScore,
+        abilityScore,
+        abilityScore,
+        abilityScore
     )
 //    AbilityScoreCardList(abilityScoreList = abilityScoreList)
 }
@@ -155,8 +162,10 @@ val abilityScore = AbilityScore(
     index = "cha",
     name = "CHA",
     fullName = "Charisma",
-    description = mutableListOf("Charisma measures your ability to interact effectively with others. It includes such factors as confidence and eloquence, and it can represent a charming or commanding personality.",
-        "A Charisma check might arise when you try to influence or entertain others, when you try to make an impression or tell a convincing lie, or when you are navigating a tricky social situation. The Deception, Intimidation, Performance, and Persuasion skills reflect aptitude in certain kinds of Charisma checks."),
+    description = mutableListOf(
+        "Charisma measures your ability to interact effectively with others. It includes such factors as confidence and eloquence, and it can represent a charming or commanding personality.",
+        "A Charisma check might arise when you try to influence or entertain others, when you try to make an impression or tell a convincing lie, or when you are navigating a tricky social situation. The Deception, Intimidation, Performance, and Persuasion skills reflect aptitude in certain kinds of Charisma checks."
+    ),
     skills = mutableListOf(
         APIReference(
             index = "deception",
