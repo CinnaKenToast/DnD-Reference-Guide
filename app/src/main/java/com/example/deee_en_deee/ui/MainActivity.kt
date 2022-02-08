@@ -13,7 +13,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavType
@@ -334,6 +336,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Log.d("debug", "LOADING")
                     CircularProgressIndicator()
+                    Text(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        fontSize = 16.sp,
+                        text = "This may take a moment",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
@@ -361,6 +370,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Log.d("debug", "LOADING")
                     CircularProgressIndicator()
+                    Text(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        fontSize = 16.sp,
+                        text = "This may take a moment",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
@@ -388,6 +404,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Log.d("debug", "LOADING")
                     CircularProgressIndicator()
+                    Text(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        fontSize = 16.sp,
+                        text = "This may take a moment",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
@@ -415,6 +438,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Log.d("debug", "LOADING")
                     CircularProgressIndicator()
+                    Text(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        fontSize = 16.sp,
+                        text = "This may take a moment",
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
