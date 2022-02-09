@@ -9,11 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.deee_en_deee.database.*
 import com.example.deee_en_deee.infoTypes.*
-import com.example.deee_en_deee.services.CategoryDataServiceRepository
 import com.example.deee_en_deee.useCase.CategoryFetcherUseCase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
     private val categoryFetcherUseCase = CategoryFetcherUseCase()
