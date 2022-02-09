@@ -27,14 +27,11 @@ import com.example.deee_en_deee.ui.components.*
 
 class MainActivity : ComponentActivity() {
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var abilityScoreViewModel: AbilityScoreViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         mainViewModel = ViewModelProvider(this, MainViewModelFactory(application = application)).get(MainViewModel::class.java)
-        abilityScoreViewModel = ViewModelProvider(this, AbilityScoreViewModelFactory(application = application)).get(AbilityScoreViewModel::class.java)
-
 
         setContent {
             Surface(
@@ -65,7 +62,7 @@ class MainActivity : ComponentActivity() {
                 )
             ) { navBackStackEntry ->
                 navBackStackEntry.arguments?.getString("abilityIndex")?.let { abilityIndex ->
-                    val abilityScore = abilityScoreViewModel.getAbilityScore(abilityIndex)
+                    val abilityScore = mainViewModel.getAbilityScore(abilityIndex)
                     AbilityScorePage(abilityScore = abilityScore)
                 }
             }
@@ -290,10 +287,10 @@ class MainActivity : ComponentActivity() {
     private fun AbilityListScreen(navController: NavController) {
         Log.d("debug", "STARTING ABILITY LIST")
         LaunchedEffect(Unit) {
-            abilityScoreViewModel.getAbilityScoreList()
+            mainViewModel.getAbilityScoreList()
         }
 
-        val isLoading by abilityScoreViewModel.isLoading
+        val isLoading by mainViewModel.isLoading
         Log.d("debug", "LOADING: $isLoading")
         Surface(
             color = Color.LightGray,
@@ -316,7 +313,7 @@ class MainActivity : ComponentActivity() {
                 }
             } else {
                 Log.d("debug", "SHOWING CARDS")
-                AbilityScoreCardList(abilityScoreList = abilityScoreViewModel.listOfAbilityScores.value, navController = navController)
+                AbilityScoreCardList(abilityScoreList = mainViewModel.listOfAbilityScores.value, navController = navController)
             }
         }
     }
@@ -422,32 +419,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-    enum class Categories(val category: String) {
-        ABILITY_SCORE("ability-scores"),
-        ALIGNMENTS("alignments"),
-        BACKGROUNDS(""),
-        CLASSES("classes"),
-        CONDITIONS("conditions"),
-        DAMAGE_TYPES("damage-types"),
-        EQUIPMENT_CATEGORIES("equipment-categories"),
-        EQUIPMENT("equipment"),
-        FEATS("feats"),
-        FEATURES("features"),
-        LANGUAGES("languages"),
-        MAGIC_ITEMS("magic-items"),
-        MAGIC_SCHOOLS("magic-schools"),
-        MONSTERS("monsters"),
-        PROFICIENCIES("proficiencies"),
-        RACES("races"),
-        RULES("rules"),
-        RULE_SECTION("rule-sections"),
-        SKILLS("skills"),
-        SPELLS("spells"),
-        SUBCLASSES("subclasses"),
-        SUBRACES("subraces"),
-        TRAITS("traits"),
-        WEAPON_PROPERTIES("weapon-properties")
-    }
-
 }

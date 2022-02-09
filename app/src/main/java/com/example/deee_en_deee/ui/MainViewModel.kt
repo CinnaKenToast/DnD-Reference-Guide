@@ -9,14 +9,18 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.deee_en_deee.database.*
 import com.example.deee_en_deee.infoTypes.*
+import com.example.deee_en_deee.services.APIGetter
+import com.example.deee_en_deee.services.CategoryDataService
+import com.example.deee_en_deee.services.CategoryDataServiceRepository
 import com.example.deee_en_deee.useCase.CategoryFetcherUseCase
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.lang.IllegalArgumentException
 
-class MainViewModel(application: Application): AndroidViewModel(application) {
-    private val categoryFetcherUseCase = CategoryFetcherUseCase()
+class MainViewModel(application: Application, private val categoryFetcherUseCase: CategoryFetcherUseCase): AndroidViewModel(application) {
     val isLoading = mutableStateOf(true)
 
+    private val abilityScoreDao = MainDatabase.getInstance(getApplication<Application>().applicationContext).abilityScoreDao()
     private val alignmentDao = MainDatabase.getInstance(getApplication<Application>().applicationContext).alignmentDao()
     private val classDao = MainDatabase.getInstance(getApplication<Application>().applicationContext).classDao()
     private val conditionDao = MainDatabase.getInstance(getApplication<Application>().applicationContext).conditionDao()
@@ -42,6 +46,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     private val listOfCategory = mutableStateOf(InitialReferences())
 
+    val listOfAbilityScores = mutableStateOf(listOf<AbilityScore>())
     val listOfAlignments = mutableStateOf(listOf<AlignmentType>())
     val listOfClasses = mutableStateOf(listOf<ClassType>())
     val listOfConditions = mutableStateOf(listOf<Condition>())
@@ -73,6 +78,29 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     private fun setLoading(isLoading: Boolean) {
         this.isLoading.value = isLoading
+    }
+
+    private suspend fun isAbilityScoreEmpty(): Boolean {
+        return abilityScoreDao.tableIsEmpty()
+    }
+
+    fun getAbilityScore(index: String): AbilityScore {
+        val abilityScore: AbilityScore
+        runBlocking {
+            setLoading(true)
+            abilityScore = abilityScoreDao.getAbilityScore(index)
+            setLoading(false)
+        }
+        return abilityScore
+    }
+
+    fun getAbilityScoreList() {
+        viewModelScope.launch {
+            Log.d("debug2", "ABILITY SCORE EMPTY: ${isAbilityScoreEmpty()}")
+            setLoading(true)
+            categoryFetcherUseCase.getAbilityScoreList(listOfCategory.value.abilityScore, listOfAbilityScores, abilityScoreDao)
+            setLoading(false)
+        }
     }
 
     private suspend fun isAlignmentEmpty(): Boolean {
@@ -585,6 +613,9 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
 class MainViewModelFactory(val application: Application): ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(Application::class.java).newInstance(application)
+        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+            return MainViewModel(application = application, categoryFetcherUseCase = CategoryFetcherUseCase(CategoryDataServiceRepository(APIGetter()))) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel Class")
     }
 }

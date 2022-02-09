@@ -6,8 +6,8 @@ import com.example.deee_en_deee.database.*
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.ui.components.capitalize
 
-class CategoryDataServiceRepository: CategoryDataService {
-    private val getter = APIGetter()
+class CategoryDataServiceRepository(private val getter: APIGetter): CategoryDataService {
+
 
     override suspend fun checkAndSetAbilityScoreList(url: String, abilityScoreList: MutableState<List<AbilityScore>>, abilityScoreDao: AbilityScoreDao) {
         Log.d("debug2", "CHECKING ABILITY SCORE")

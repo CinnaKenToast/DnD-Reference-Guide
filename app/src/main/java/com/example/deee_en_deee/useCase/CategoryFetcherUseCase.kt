@@ -5,8 +5,7 @@ import com.example.deee_en_deee.database.*
 import com.example.deee_en_deee.infoTypes.*
 import com.example.deee_en_deee.services.CategoryDataServiceRepository
 
-class CategoryFetcherUseCase {
-    private val categoryDataService =  CategoryDataServiceRepository()
+class CategoryFetcherUseCase(private val categoryDataService: CategoryDataServiceRepository) {
 
     suspend fun getCategoryList(categoryList: MutableState<InitialReferences>) {
         categoryList.value = categoryDataService.getCategories().getOrThrow()
