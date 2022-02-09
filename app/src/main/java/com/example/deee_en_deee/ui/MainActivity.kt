@@ -29,30 +29,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var mainViewModel: MainViewModel
     private lateinit var abilityScoreViewModel: AbilityScoreViewModel
 
-//    private val abilityScoreList by mainVM.listOfAbilityScores
-//    private val alignmentList by mainVM.listOfAlignments
-//    private val classList by mainVM.listOfClasses
-//    private val conditionList by mainVM.listOfConditions
-//    private val damageTypeList by mainVM.listOfDamageTypes
-//    private val equipmentCategoryList by mainVM.listOfEquipmentCategories
-//    private val equipmentList by mainVM.listOfEquipments
-//    private val featList by mainVM.listOfFeats
-//    private val featureList by mainVM.listOfFeatures
-//    private val languageList by mainVM.listOfLanguages
-//    private val magicItemList by mainVM.listOfMagicItems
-//    private val magicSchoolList by mainVM.listOfMagicSchools
-//    private val monsterList by mainVM.listOfMonsters
-//    private val proficiencyList by mainVM.listOfProficiencies
-//    private val raceList by mainVM.listOfRaces
-//    private val ruleList by mainVM.listOfRules
-//    private val ruleSectionList by mainVM.listOfRuleSections
-//    private val skillList by mainVM.listOfSkills
-//    private val spellList by mainVM.listOfSpells
-//    private val subclassList by mainVM.listOfSubclasses
-//    private val subraceList by mainVM.listOfSubraces
-//    private val traitList by mainVM.listOfTraits
-//    private val weaponPropertyList by mainVM.listOfWeaponProperties
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -75,13 +51,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-//    override fun onBackPressed() {
-//        //super.onBackPressed()
-//        setContent {
-//            InitialButtons()
-//        }
-//    }
 
     @Composable
     fun AppNavigator() {
