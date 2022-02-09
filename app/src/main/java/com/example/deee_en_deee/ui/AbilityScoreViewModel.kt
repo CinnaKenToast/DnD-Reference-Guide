@@ -18,7 +18,7 @@ class AbilityScoreViewModel(application: Application): AndroidViewModel(applicat
     private val categoryFetcherUseCase = CategoryFetcherUseCase()
     val isLoading = mutableStateOf(true)
 
-    private val abilityScoreDao = MainDatabase.getInstance(application.applicationContext).abilityScoreDao()
+    private val abilityScoreDao = MainDatabase.getInstance(getApplication<Application>().applicationContext).abilityScoreDao()
     private val listOfCategory = mutableStateOf(InitialReferences())
     val listOfAbilityScores = mutableStateOf(listOf<AbilityScore>())
 
@@ -31,7 +31,6 @@ class AbilityScoreViewModel(application: Application): AndroidViewModel(applicat
     private fun setLoading(isLoading: Boolean) {
         this.isLoading.value = isLoading
     }
-
 
     private suspend fun isAbilityScoreEmpty(): Boolean {
         return abilityScoreDao.tableIsEmpty()
