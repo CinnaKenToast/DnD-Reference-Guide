@@ -1,5 +1,4 @@
 package com.example.deee_en_deee.infoTypes
-import com.example.deee_en_deee.database.ClassEquipmentPrerequisite
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

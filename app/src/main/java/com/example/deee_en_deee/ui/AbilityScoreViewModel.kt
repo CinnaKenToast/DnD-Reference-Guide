@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.deee_en_deee.database.AbilityScoreDatabase
+import com.example.deee_en_deee.database.MainDatabase
 import com.example.deee_en_deee.infoTypes.AbilityScore
 import com.example.deee_en_deee.infoTypes.InitialReferences
 import com.example.deee_en_deee.useCase.CategoryFetcherUseCase
@@ -18,8 +18,8 @@ class AbilityScoreViewModel(application: Application): AndroidViewModel(applicat
     private val categoryFetcherUseCase = CategoryFetcherUseCase()
     val isLoading = mutableStateOf(true)
 
-    private val abilityScoreDao = AbilityScoreDatabase.getInstance(application.applicationContext).abilityScoreDao()
-    private val listOfCategory = mutableStateOf(InitialReferences())
+    val abilityScoreDao = MainDatabase.getInstance(application.applicationContext).abilityScoreDao()
+    val listOfCategory = mutableStateOf(InitialReferences())
     val listOfAbilityScores = mutableStateOf(listOf<AbilityScore>())
 
     init {

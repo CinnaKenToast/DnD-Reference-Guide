@@ -32,9 +32,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val vmFactory = MainViewModelFactory(application = application)
-        mainViewModel = ViewModelProvider(this, vmFactory).get(MainViewModel::class.java)
-        abilityScoreViewModel = ViewModelProvider(this, vmFactory).get(AbilityScoreViewModel::class.java)
+        mainViewModel = ViewModelProvider(this, MainViewModelFactory(application = application)).get(MainViewModel::class.java)
+        abilityScoreViewModel = ViewModelProvider(this, AbilityScoreViewModelFactory(application = application)).get(AbilityScoreViewModel::class.java)
 
 
         setContent {
